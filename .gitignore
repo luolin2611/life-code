@@ -1,0 +1,5 @@
+# 忽略提交文件
+/.idea
+/life-code.iml
+/eureka-server/target
+/music/target
