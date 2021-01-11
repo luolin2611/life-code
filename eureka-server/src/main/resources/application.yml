@@ -1,5 +1,5 @@
 server:
-  port: 4590
+  port: 10001
 
 eureka:
   instance:
