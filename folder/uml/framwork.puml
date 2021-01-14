@@ -1,0 +1,8 @@
+@startuml
+:maven-client;
+:maven-web;
+
+
+
+@enduml
+
