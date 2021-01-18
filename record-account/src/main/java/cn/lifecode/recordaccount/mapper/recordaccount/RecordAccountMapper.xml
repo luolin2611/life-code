@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.lifecode.recordaccount.mapper.recordaccount.RecordAccountMapper">
+    <resultMap id="recordAccount" type="cn.lifecode.recordaccount.entity.RecordAccount">
+        <result column="record_account_id" property="recordAccountId"/>
+        <result column="bill_money" property="billMoney"/>
+        <result column="classify_id" property="classifyId"/>
+        <result column="classify_name" property="classifyName"/>
+        <result column="classify_type" property="classifyType"/>
+        <result column="user_id" property="userId"/>
+        <result column="remark" property="remark"/>
+        <result column="record_time" property="recordTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+
+    <!-- 添加预算 -->
+    <insert id="addRecordAccount" parameterType="cn.lifecode.recordaccount.entity.RecordAccount"
+            keyProperty="record_account_id"
+            useGeneratedKeys="true">
+        insert into `record_account`.`record_account` (`bill_money`,
+                                                       `classify_id`,
+                                                       `classify_name`,
+                                                       `classify_type`,
+                                                       `user_id`,
+                                                       `remark`,
+                                                       `record_time`,
+                                                       `update_time`)
+        values (#{recordAccount.billMoney},
+                #{recordAccount.classifyId},
+                #{recordAccount.classifyName},
+                #{recordAccount.classifyType},
+                #{recordAccount.userId},
+                #{recordAccount.remark},
+                #{recordAccount.recordTime},
+                #{recordAccount.updateTime});
+
+    </insert>
+
+
+</mapper>

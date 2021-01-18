@@ -12,7 +12,7 @@ import java.util.Date;
  */
 @Data
 public class SysUser implements Serializable {
-    String userId;
+    Integer userId;
     String userName;
     String password;
     Date updateTime;
@@ -20,68 +20,4 @@ public class SysUser implements Serializable {
     String userLevel;
     String realName;
     String addUserName;
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getUserLevel() {
-        return userLevel;
-    }
-
-    public void setUserLevel(String userLevel) {
-        this.userLevel = userLevel;
-    }
-
-    public String getRealName() {
-        return realName;
-    }
-
-    public void setRealName(String realName) {
-        this.realName = realName;
-    }
-
-    public String getAddUserName() {
-        return addUserName;
-    }
-
-    public void setAddUserName(String addUserName) {
-        this.addUserName = addUserName;
-    }
 }

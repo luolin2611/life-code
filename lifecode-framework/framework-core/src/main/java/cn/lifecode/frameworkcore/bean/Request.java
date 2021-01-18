@@ -1,5 +1,7 @@
 package cn.lifecode.frameworkcore.bean;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import javax.validation.Valid;
@@ -16,6 +18,8 @@ public class Request<T extends Serializable> implements Serializable {
      * 校验请求
      */
     @NotNull
+    @JSONField(name = "check_request")
+    @JsonProperty("check_request")
     private CheckRequest checkRequest;
 
     /**

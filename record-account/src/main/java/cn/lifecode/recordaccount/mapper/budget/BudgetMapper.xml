@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.lifecode.recordaccount.mapper.budget.BudgetMapper">
+    <resultMap id="budget" type="cn.lifecode.recordaccount.entity.Budget">
+        <result column="budget_id" property="budgetId"/>
+        <result column="classify_id" property="classifyId"/>
+        <result column="budget_money" property="budgetMoney"/>
+        <result column="budget_type" property="budgetType"/>
+        <result column="user_id" property="userId"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+
+    <!-- 查询用户 -->
+    <!--    <select id="findSysUser" parameterType="string" resultType="cn.lifecode.user.po.SysUser">-->
+    <!--	    select *-->
+    <!--	    from sys_user-->
+    <!--	    where user_name = #{user_name}N-->
+    <!--	    and password =#{password}-->
+    <!--	    and status = '00'-->
+    <!--    </select>-->
+
+    <!--    <select id="findSysUserByUsername" parameterType="string" resultType="cn.lifecode.backmusic.po.SysUser">-->
+    <!--	    select *-->
+    <!--	    from sys_user-->
+    <!--	    where user_name = #{user_name}-->
+    <!--    </select>-->
+
+    <!-- 添加预算 -->
+    <insert id="addBudget" parameterType="cn.lifecode.recordaccount.entity.Budget" keyProperty="budgetId" useGeneratedKeys="true">
+        insert into `record_account`.`budget` (`classify_id`,
+                                               `budget_money`,
+                                               `budget_type`,
+                                               `user_id`,
+                                               `update_time`)
+        values (#{budget.classifyId},
+                #{budget.budgetMoney},
+                #{budget.budgetType},
+                #{budget.userId},
+                #{budget.updateTime});
+    </insert>
+
+
+    <!--	 <select id="findAllSysUser" resultMap="sysUserList">-->
+    <!--	    select * from sys_user order by update_time DESC-->
+    <!--    </select>-->
+
+    <!--     <select id="findSysUserByIdAndPass" parameterType="string" resultType="string">-->
+    <!--	    select user_id-->
+    <!--	    from sys_user-->
+    <!--	    where user_id = #{user_id} and password = #{password}-->
+    <!--    </select>-->
+
+    <!--    <update id="updateSysUserPass" parameterType="string">-->
+    <!--    		update sys_user set password = #{password} where user_id = #{user_id}-->
+    <!--    </update>-->
+
+</mapper>

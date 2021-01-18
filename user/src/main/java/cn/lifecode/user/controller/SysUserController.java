@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
+ * 系统用户
+ *
  * @author luolin
  * @date 2021-01-12 10:38:48
  */
@@ -22,6 +24,9 @@ public class SysUserController {
         this.sysUserService = sysUserService;
     }
 
+    /**
+     * 添加系统用户
+     */
     @PostMapping("/addSysUser")
     public Response addSysUser(@RequestBody Request<SysUser> request) {
         this.sysUserService.addSysUser(request.getBody());

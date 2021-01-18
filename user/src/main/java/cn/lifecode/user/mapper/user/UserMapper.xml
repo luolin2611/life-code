@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.lifecode.user.mapper.user.UserMapper">
+    <resultMap id="user" type="cn.lifecode.user.entity.User">
+        <result column="user_id" property="userId"/>
+        <result column="user_name" property="userName"/>
+        <result column="password" property="password"/>
+        <result column="personal_resume" property="personalResume"/>
+        <result column="state" property="state"/>
+        <result column="real_name" property="realName"/>
+        <result column="email" property="email"/>
+        <result column="mobile" property="mobile"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+
+    <!-- 查询用户 -->
+    <!--    <select id="findSysUser" parameterType="string" resultType="cn.lifecode.user.po.SysUser">-->
+    <!--	    select *-->
+    <!--	    from sys_user-->
+    <!--	    where user_name = #{user_name}N-->
+    <!--	    and password =#{password}-->
+    <!--	    and status = '00'-->
+    <!--    </select>-->
+
+    <!--    <select id="findSysUserByUsername" parameterType="string" resultType="cn.lifecode.backmusic.po.SysUser">-->
+    <!--	    select *-->
+    <!--	    from sys_user-->
+    <!--	    where user_name = #{user_name}-->
+    <!--    </select>-->
+
+    <!-- 添加系统用户 -->
+    <insert id="addUser" parameterType="cn.lifecode.user.entity.User" keyProperty="user_id" useGeneratedKeys="true">
+        insert into user(
+                 user_name,
+                 password,
+                 personal_resume,
+                 state,
+                 real_name,
+                 email,
+                 mobile,
+                 update_time
+        )
+        values (
+                #{user.userName},
+                #{user.password},
+                #{user.personalResume},
+                #{user.state},
+                #{user.realName},
+                #{user.email},
+                #{user.mobile},
+                #{user.updateTime}
+        )
+    </insert>
+
+
+    <!--	 <select id="findAllSysUser" resultMap="sysUserList">-->
+    <!--	    select * from sys_user order by update_time DESC-->
+    <!--    </select>-->
+
+    <!--     <select id="findSysUserByIdAndPass" parameterType="string" resultType="string">-->
+    <!--	    select user_id-->
+    <!--	    from sys_user-->
+    <!--	    where user_id = #{user_id} and password = #{password}-->
+    <!--    </select>-->
+
+    <!--    <update id="updateSysUserPass" parameterType="string">-->
+    <!--    		update sys_user set password = #{password} where user_id = #{user_id}-->
+    <!--    </update>-->
+
+</mapper>
