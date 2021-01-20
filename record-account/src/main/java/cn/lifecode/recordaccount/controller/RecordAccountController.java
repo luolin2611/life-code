@@ -2,6 +2,7 @@ package cn.lifecode.recordaccount.controller;
 
 import cn.lifecode.frameworkcore.bean.Request;
 import cn.lifecode.frameworkcore.bean.Response;
+import cn.lifecode.frameworkcore.dto.RequestObject;
 import cn.lifecode.frameworkcore.dto.ResponseObject;
 import cn.lifecode.recordaccount.entity.RecordAccount;
 import cn.lifecode.recordaccount.service.recordaccount.RecordAccountService;
@@ -36,5 +37,17 @@ public class RecordAccountController {
     public Response<ResponseObject> addRecordAccount(@RequestBody Request<RecordAccount> request) {
         return recordAccountService.addRecordAccount(request.getBody());
     }
+
+    /**
+     * 将Excel账单导入到数据库
+     *
+     * @param request
+     * @return
+     */
+    @PostMapping("/excelConversionToDataBase")
+    public Response<ResponseObject> excelConversionToDataBase(@RequestBody Request<RequestObject> request) {
+        return recordAccountService.excelConversionToDataBase();
+    }
+
 
 }

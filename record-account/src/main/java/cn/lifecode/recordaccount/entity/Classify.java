@@ -23,12 +23,12 @@ public class Classify implements Serializable {
      * 支付类型
      * 0-支出，1-收入
      */
-    private String payType;
+    private String type;
     /**
      * 分类类型
      * 0-预设，1-用户新增
      */
-    private String type;
+    private String addType;
     /**
      * 图标ID
      */

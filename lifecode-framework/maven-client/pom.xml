@@ -55,6 +55,13 @@
                 <version>1.2.75</version>
             </dependency>
 
+            <!-- excel操作 -->
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>3.17</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 </project>

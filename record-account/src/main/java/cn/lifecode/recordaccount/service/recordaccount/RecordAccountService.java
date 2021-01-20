@@ -13,4 +13,6 @@ import cn.lifecode.recordaccount.entity.RecordAccount;
  */
 public interface RecordAccountService {
     Response<ResponseObject> addRecordAccount(RecordAccount recordAccount);
+
+    Response<ResponseObject> excelConversionToDataBase();
 }

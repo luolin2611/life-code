@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.lifecode.recordaccount.mapper.icon.IconMapper">
+    <resultMap id="icon" type="cn.lifecode.recordaccount.entity.Icon">
+        <result column="icon_id" property="iconId"/>
+        <result column="icon_name" property="iconName"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 添加预算 -->
+    <insert id="addIcon" parameterType="cn.lifecode.recordaccount.entity.Icon" keyProperty="icon_id"
+            useGeneratedKeys="true">
+        insert into `record_account`.`icon` (`icon_name`,
+                                             `update_time`)
+        values (#{icon.iconName},
+                #{icon.updateTime});
+    </insert>
+
+    <!-- 查询所有icon -->
+    <select id="queryAllIcon" resultMap="icon">
+        select *
+        from `record_account`.`icon`;
+    </select>
+</mapper>

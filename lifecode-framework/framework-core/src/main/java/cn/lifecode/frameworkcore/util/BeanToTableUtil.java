@@ -11,12 +11,12 @@ import java.util.regex.Pattern;
  * @author luolin
  * @date 2021-01-16 16:41:54
  */
-public class BeanToTableUtils {
+public class BeanToTableUtil {
     private static final String DATE_TYPE = "java.util.Date";
     private static final String STRING_TYPE = "java.lang.String";
     private static final String INTEGER_TYPE = "java.lang.Integer";
 
-    private BeanToTableUtils() {
+    private BeanToTableUtil() {
     }
 
     public static String generateSql(Class<Object> obj) {
