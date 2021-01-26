@@ -48,6 +48,4 @@ public class RecordAccountController {
     public Response<ResponseObject> excelConversionToDataBase(@RequestBody Request<RequestObject> request) {
         return recordAccountService.excelConversionToDataBase();
     }
-
-
 }

@@ -3,37 +3,48 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>cn.lifecode</groupId>
-        <artifactId>life-code</artifactId>
+        <artifactId>maven-web</artifactId>
+        <groupId>cn.lifecode.mavenweb</groupId>
         <version>1.0-SNAPSHOT</version>
+        <relativePath>../lifecode-framework/maven-web/pom.xml</relativePath>
     </parent>
 
     <groupId>cn.lifecode.music</groupId>
     <artifactId>music</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>music</name>
-    <description>Demo project for Spring Boot</description>
+
     <packaging>jar</packaging>
 
     <dependencies>
-        <!-- eureka 客户端 -->
+        <!--框架 -->
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+            <groupId>cn.lifecode.framewordcore</groupId>
+            <artifactId>frameword-core</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.lifecode.mavenweb</groupId>
+            <artifactId>maven-web</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <artifactId>framework-db</artifactId>
+            <groupId>cn.lifecode.frameworkdb</groupId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
-<!--    <build>-->
-<!--        <resources>-->
-<!--            <resource>-->
-<!--                <directory>src/main/java</directory>-->
-<!--                <includes>-->
-<!--                    <include>**/*.xml</include>-->
-<!--                </includes>-->
-<!--            </resource>-->
-<!--            <resource>-->
-<!--                <directory>src/main/resources</directory>-->
-<!--            </resource>-->
-<!--        </resources>-->
-<!--    </build>-->
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+    </build>
 </project>

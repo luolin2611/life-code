@@ -11,7 +11,7 @@
 
     <groupId>cn.lifecode.recordaccount</groupId>
     <artifactId>record-account</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>
 
     <packaging>jar</packaging>
 
@@ -23,11 +23,6 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>cn.lifecode.mavenweb</groupId>
-            <artifactId>maven-web</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <artifactId>framework-db</artifactId>
             <groupId>cn.lifecode.frameworkdb</groupId>
             <version>1.0-SNAPSHOT</version>
@@ -35,6 +30,22 @@
     </dependencies>
 
     <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>cn.lifecode.recordaccount.RecordAccountApplication</mainClass>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
         <resources>
             <resource>
                 <directory>src/main/java</directory>

@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="cn.lifecode.recordaccount.mapper.recordaccount.RecordAccountMapper">
+    <!-- RecordAccount 对象 -->
     <resultMap id="recordAccount" type="cn.lifecode.recordaccount.entity.RecordAccount">
         <result column="record_account_id" property="recordAccountId"/>
         <result column="bill_money" property="billMoney"/>
@@ -12,6 +13,20 @@
         <result column="remark" property="remark"/>
         <result column="record_time" property="recordTime"/>
         <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- DayRecordAccountObject -->
+    <resultMap id="recordAccountObject" type="cn.lifecode.recordaccount.entity.DayRecordAccountObject">
+        <result column="record_account_id" property="recordAccountId"/>
+        <result column="classify_id" property="classifyId"/>
+        <result column="classify_type" property="classifyType"/>
+        <result column="classify_name" property="classifyName"/>
+        <result column="remark" property="remark"/>
+        <result column="bill_money" property="billMoney"/>
+        <!-- 一对一 -->
+        <association property="icon" javaType="cn.lifecode.recordaccount.entity.Icon">
+            <result column="icon_name" property="iconName"/>
+        </association>
     </resultMap>
 
 
@@ -38,5 +53,41 @@
 
     </insert>
 
+    <!-- 查询总余额 - dateType: year - 年, month - 月, day - 日 -->
+    <select id="queryTotalMoney" resultType="double">
+        select sum(bill_money) from record_account where classify_type = #{classifyType}
+        <if test="dateType == 'year'">
+            and date_format(record_time , '%Y') = #{dateTime}
+        </if>
+        <if test="dateType == 'month'">
+            and date_format(record_time , '%Y%m') = #{dateTime}
+        </if>
+        <if test="dateType == 'day'">
+            and date_format(record_time , '%Y%m%d') = #{dateTime}
+        </if>
+    </select>
+
+    <!-- 查询(指定日期的返回日期对象) -->
+    <select id="queryRecordAccountObject" resultMap="recordAccountObject">
+        SELECT
+        ra.record_account_id,
+        ra.classify_id,
+        ra.classify_name,
+        ra.classify_type,
+        ra.remark,
+        ra.bill_money,
+        icon.icon_name
+        FROM record_account ra, icon, classify cl
+        WHERE icon.icon_id = cl.icon_id
+        AND cl.classify_id = ra.classify_id
+        <if test="dateType == 'day'">
+            AND date_format(ra.record_time, '%Y%m%d') = #{startDate}
+        </if>
+        <if test="dateType == 'period'">
+            AND date_format(ra.record_time, '%Y%m%d') gte #{startDate}
+            AND date_format(ra.record_time , '%Y%m%d') lte #{endDate}
+        </if>
+        order by ra.record_time desc;
+    </select>
 
 </mapper>
