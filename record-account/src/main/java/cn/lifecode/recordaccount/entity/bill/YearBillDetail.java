@@ -3,6 +3,7 @@ package cn.lifecode.recordaccount.entity.bill;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 年账单明细
@@ -14,12 +15,7 @@ import java.io.Serializable;
 @Data
 public class YearBillDetail implements Serializable {
     /**
-     * 年结余
-     */
-    private double yearSurplus;
-
-    /**
      * 年账单明细
      */
-    private YearBillDetailObject yearBillDetailObject;
+    private List<YearBillDetailObject> yearBillDetailObjectList;
 }

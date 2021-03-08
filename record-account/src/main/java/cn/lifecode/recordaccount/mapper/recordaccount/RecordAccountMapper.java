@@ -1,5 +1,6 @@
 package cn.lifecode.recordaccount.mapper.recordaccount;
 
+import cn.lifecode.recordaccount.entity.DayRecordAccount;
 import cn.lifecode.recordaccount.entity.DayRecordAccountObject;
 import cn.lifecode.recordaccount.entity.RecordAccount;
 import org.apache.ibatis.annotations.Mapper;
@@ -27,15 +28,43 @@ public interface RecordAccountMapper {
      * @param dateType     year-年，month-月，day-日
      * @param dateTime     year-2021，month-202101，day-20210120
      */
-    double queryTotalMoney(@Param("classifyType") String classifyType, @Param("dateType") String dateType, @Param("dateTime") String dateTime);
+    double queryTotalMoney(
+            @Param("classifyType") String classifyType,
+            @Param("dateType") String dateType,
+            @Param("dateTime") String dateTime,
+            @Param("userId") String userId
+    );
 
     /**
-     * 查询 DayRecordAccountObject
+     * 查询每天的记账list （ DayRecordAccountObject ）
      *
-     * @param dateType  day-日（startDate 为指定查询的日期），period-时间段（如果查询时间段：startDate，endDate不能为空）
+     * @param dateType  month-月(202101), day-日（startDate 为指定查询的日期），period-时间段（如果查询时间段：startDate，endDate不能为空）
      * @param startDate 开始时间（20210120）
      * @param endDate   结束时间 (20210121)
      * @return
      */
-    List<DayRecordAccountObject> queryRecordAccountObject(@Param("dateType") String dateType, @Param("startDate") String startDate, @Param("endDate") String endDate);
+    List<DayRecordAccountObject> queryRecordAccountObject(
+            @Param("dateType") String dateType,
+            @Param("startDate") String startDate,
+            @Param("endDate") String endDate,
+            @Param("userId") String userId
+    );
+
+    /**
+     * 查询指定日期的记账list （ DayRecordAccount ）
+     *
+     * @param dateType  month-月(202101), day-日（startDate 为指定查询的日期），period-时间段（如果查询时间段：startDate，endDate不能为空）
+     * @param startDate 开始时间（20210120）
+     * @param endDate   结束时间 (20210121)
+     * @param startPage 起始索引 = 当前页码 * pageSize (1 * 10)
+     * @param pageSize  页码大小
+     * @return
+     */
+    List<DayRecordAccount> queryRecordAccounts(
+            @Param("dateType") String dateType,
+            @Param("startDate") String startDate,
+            @Param("endDate") String endDate,
+            @Param("startPage") int startPage,
+            @Param("pageSize") int pageSize
+    );
 }

@@ -17,10 +17,15 @@ import java.util.List;
 @Data
 public class YearBillDetailObject implements Serializable {
     /**
-     * 时间字符串：eg: 202101
+     * 年：eg: 2021
      */
     @NotNull
-    private String dateStr;
+    private String year;
+    /**
+     * 月份：eg: 1、12
+     */
+    @NotNull
+    private String month;
     /**
      * 收入
      */
@@ -36,9 +41,4 @@ public class YearBillDetailObject implements Serializable {
      */
     @NotNull
     private double surplus;
-    /**
-     * 每日的单个对象列表
-     */
-    @NotNull
-    private List<DayRecordAccountObject> dayRecordAccountObjectList;
 }

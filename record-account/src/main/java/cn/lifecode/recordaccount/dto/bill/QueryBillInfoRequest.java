@@ -14,6 +14,11 @@ import java.io.Serializable;
 @Data
 public class QueryBillInfoRequest implements Serializable {
     /**
+     * 用户ID
+     */
+    @NotNull(message = "用户ID不能为空")
+    private String userId;
+    /**
      * 账单类型
      * 0-年,1-月,2-时间段
      */
@@ -39,4 +44,12 @@ public class QueryBillInfoRequest implements Serializable {
      * 当第一个参数为2的时候必须填充，格式：yyyyMMdd (eg: 20210121)
      */
     private String endDate;
+    /**
+     * 请求页索引 （从1开始表示第一页）
+     */
+    private int startPage;
+    /**
+     * 页码大小
+     */
+    private int pageSize;
 }

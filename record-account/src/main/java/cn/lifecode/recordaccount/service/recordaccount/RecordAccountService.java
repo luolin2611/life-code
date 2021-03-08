@@ -17,5 +17,5 @@ public interface RecordAccountService {
 
     Response<ResponseObject> excelConversionToDataBase();
 
-    Response<HomeInitInfoResponse> homeInitInfo();
+    Response<HomeInitInfoResponse> homeInitInfo(String userId);
 }

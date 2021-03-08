@@ -4,6 +4,7 @@ import cn.lifecode.frameworkcore.bean.Request;
 import cn.lifecode.frameworkcore.bean.Response;
 import cn.lifecode.frameworkcore.dto.RequestObject;
 import cn.lifecode.frameworkcore.util.DateUtil;
+import cn.lifecode.recordaccount.dto.home.HomeInitInfoRequest;
 import cn.lifecode.recordaccount.dto.home.HomeInitInfoResponse;
 import cn.lifecode.recordaccount.service.recordaccount.RecordAccountService;
 import org.springframework.web.bind.annotation.*;
@@ -27,8 +28,9 @@ public class HomeController {
      * @return
      */
     @PostMapping("/homeInitInfo")
-    public Response<HomeInitInfoResponse> homeInitInfo(@RequestBody Request<RequestObject> request) {
-        return recordAccountService.homeInitInfo();
+    public Response<HomeInitInfoResponse> homeInitInfo(@RequestBody Request<HomeInitInfoRequest> request) {
+        String userId = request.getBody().getUserId();
+        return recordAccountService.homeInitInfo(userId);
     }
 
     @PostMapping("/getSystem")

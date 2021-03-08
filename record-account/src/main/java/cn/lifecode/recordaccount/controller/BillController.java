@@ -4,6 +4,7 @@ import cn.lifecode.frameworkcore.bean.Request;
 import cn.lifecode.frameworkcore.bean.Response;
 import cn.lifecode.recordaccount.dto.bill.QueryBillInfoRequest;
 import cn.lifecode.recordaccount.dto.bill.QueryBillInfoResponse;
+import cn.lifecode.recordaccount.service.bill.BillService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/bill")
 public class BillController {
+    private final BillService billService;
+
+    public BillController(BillService billService) {
+        this.billService = billService;
+    }
 
     /**
      * 获取账单信息
@@ -30,7 +36,7 @@ public class BillController {
      */
     @PostMapping("/queryBillInfo")
     public Response<QueryBillInfoResponse> queryBillInfo(@RequestBody Request<QueryBillInfoRequest> request) {
-        return null;
+        return billService.queryBillInfo(request);
     }
 
 

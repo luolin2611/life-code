@@ -30,28 +30,69 @@
     <!--	    where user_name = #{user_name}-->
     <!--    </select>-->
 
-    <!-- 添加系统用户 -->
-    <insert id="addUser" parameterType="cn.lifecode.user.entity.User" keyProperty="user_id" useGeneratedKeys="true">
-        insert into user(
-                 user_name,
-                 password,
-                 personal_resume,
-                 state,
-                 real_name,
-                 email,
-                 mobile,
-                 update_time
-        )
-        values (
-                #{user.userName},
+    <!-- 查询账户是否存在 -->
+    <select id="queryUserByAccount" parameterType="string" resultMap="user">
+        select *
+        from user
+        where user_name = #{account}
+           or email = #{account}
+           or mobile = #{account}
+    </select>
+
+    <!-- 用户登录 -->
+    <select id="login" parameterType="cn.lifecode.user.common.dto.user.LoginReq" resultMap="user">
+        select *
+        from user
+        where user_name = #{loginReq.account}
+           or email = #{loginReq.account}
+           or mobile = #{loginReq.account}
+            and password = #{loginReq.password}
+            and state = '0'
+    </select>
+
+    <!-- 查询用户通过用户名 -->
+    <select id="queryUserByUsername" parameterType="string" resultMap="user">
+        select *
+        from user
+        where user_name = #{userName}
+            and state = '0'
+    </select>
+
+    <!-- 查询用户通过邮箱 -->
+    <select id="queryUserByEmail" parameterType="string" resultMap="user">
+        select *
+        from user
+        where email = #{email}
+            and state = '0'
+    </select>
+
+    <!-- 查询用户通过手机号 -->
+    <select id="queryUserByMobile" parameterType="string" resultMap="user">
+        select *
+        from user
+        where mobile = #{mobile}
+            and state = '0'
+    </select>
+
+    <!-- 注册用户 -->
+    <insert id="registerUser" parameterType="cn.lifecode.user.entity.User" keyProperty="user_id"
+            useGeneratedKeys="true">
+        insert into user(user_name,
+                         password,
+                         personal_resume,
+                         state,
+                         real_name,
+                         email,
+                         mobile,
+                         update_time)
+        values (#{user.userName},
                 #{user.password},
                 #{user.personalResume},
                 #{user.state},
                 #{user.realName},
                 #{user.email},
                 #{user.mobile},
-                #{user.updateTime}
-        )
+                #{user.updateTime})
     </insert>
 
 

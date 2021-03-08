@@ -44,13 +44,11 @@ public class Response<T extends Serializable> implements Serializable {
 
     /**
      * 自定义返回信息，数据成功
-     * @param t
-     * @param <T>
      * @return
      */
-    public static <T extends Serializable> Response<T> success(String msg, T t){
+    public static Response success(String msg){
         String code = ResStatusEnum.SUCCESS.getCode();
-        return Response.setRes(code, msg, t);
+        return Response.setRes(code, msg);
     }
 
     /**
@@ -62,6 +60,17 @@ public class Response<T extends Serializable> implements Serializable {
     public static <T extends Serializable> Response<T> success(T t){
         String code = ResStatusEnum.SUCCESS.getCode();
         String msg = ResStatusEnum.SUCCESS.getMsg();
+        return Response.setRes(code, msg, t);
+    }
+
+    /**
+     * 自定义返回数据成功
+     * @param t
+     * @param <T>
+     * @return
+     */
+    public static <T extends Serializable> Response<T> success(T t, String msg){
+        String code = ResStatusEnum.SUCCESS.getCode();
         return Response.setRes(code, msg, t);
     }
 
@@ -88,23 +97,11 @@ public class Response<T extends Serializable> implements Serializable {
     /**
      * 自定义返回数据-失败
      * @param t
-     * @param <T>
      * @return
      */
-    public static <T> Response error(T t){
-        String code = ResStatusEnum.SERVER_ERROR.getCode();
-        String msg = ResStatusEnum.SERVER_ERROR.getMsg();
-        return Response.setRes(code, msg);
-    }
-
-    /**
-     * 自定义返回信息，返回数据-失败
-     * @param t
-     * @param <T>
-     * @return
-     */
-    public static <T> Response error(String msg, T t){
-        String code = ResStatusEnum.SERVER_ERROR.getCode();
+    public static Response error(ResStatusEnum t){
+        String code = t.getCode();
+        String msg = t.getMsg();
         return Response.setRes(code, msg);
     }
 

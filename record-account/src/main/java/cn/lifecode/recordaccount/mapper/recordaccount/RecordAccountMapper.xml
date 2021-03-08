@@ -23,10 +23,20 @@
         <result column="classify_name" property="classifyName"/>
         <result column="remark" property="remark"/>
         <result column="bill_money" property="billMoney"/>
+        <result column="record_time" property="recordTime"/>
         <!-- 一对一 -->
         <association property="icon" javaType="cn.lifecode.recordaccount.entity.Icon">
             <result column="icon_name" property="iconName"/>
         </association>
+    </resultMap>
+
+    <!-- DayRecordAccount -->
+    <resultMap id="recordAccounts" type="cn.lifecode.recordaccount.entity.DayRecordAccount">
+        <result column="date_str" property="dateStr"/>
+        <result column="day_expense" property="dayExpense"/>
+        <!-- 一对多 -->
+        <collection property="dayRecordAccountObjects" resultMap="recordAccountObject">
+        </collection>
     </resultMap>
 
 
@@ -55,7 +65,7 @@
 
     <!-- 查询总余额 - dateType: year - 年, month - 月, day - 日 -->
     <select id="queryTotalMoney" resultType="double">
-        select sum(bill_money) from record_account where classify_type = #{classifyType}
+        select COALESCE(sum(bill_money),0) from record_account where classify_type = #{classifyType} and user_id = #{userId}
         <if test="dateType == 'year'">
             and date_format(record_time , '%Y') = #{dateTime}
         </if>
@@ -76,18 +86,56 @@
         ra.classify_type,
         ra.remark,
         ra.bill_money,
-        icon.icon_name
+        icon.icon_name,
+        ra.record_time
         FROM record_account ra, icon, classify cl
         WHERE icon.icon_id = cl.icon_id
         AND cl.classify_id = ra.classify_id
+        AND ra.user_id = #{userId}
+        <if test="dateType == 'month'">
+            AND date_format(ra.record_time, '%Y%m') = #{startDate}
+        </if>
         <if test="dateType == 'day'">
             AND date_format(ra.record_time, '%Y%m%d') = #{startDate}
         </if>
         <if test="dateType == 'period'">
-            AND date_format(ra.record_time, '%Y%m%d') gte #{startDate}
-            AND date_format(ra.record_time , '%Y%m%d') lte #{endDate}
+            AND date_format(ra.record_time, '%Y%m%d') &gt;= #{startDate}
+            AND date_format(ra.record_time , '%Y%m%d') &lt;= #{endDate}
         </if>
         order by ra.record_time desc;
+    </select>
+
+    <!-- 查询recordAccounts -->
+    <select id="queryRecordAccounts" resultMap="recordAccounts">
+        SELECT(CASE DATE_FORMAT(ra.record_time, '%w')
+        WHEN 0 THEN DATE_FORMAT(ra.record_time, '%m月%d日 星期日')
+        WHEN 1 THEN DATE_FORMAT(ra.record_time, '%m月%d日 星期一')
+        WHEN 2 THEN DATE_FORMAT(ra.record_time, '%m月%d日 星期二')
+        WHEN 3 THEN DATE_FORMAT(ra.record_time, '%m月%d日 星期三')
+        WHEN 4 THEN DATE_FORMAT(ra.record_time, '%m月%d日 星期四')
+        WHEN 5 THEN DATE_FORMAT(ra.record_time, '%m月%d日 星期五')
+        WHEN 6 THEN DATE_FORMAT(ra.record_time, '%m月%d日 星期六') END) date_str,
+        (SELECT SUM(bill_money)
+        FROM record_account
+        WHERE classify_type = '0'
+        AND record_time = ra.record_time) day_expense,
+        ra.*,
+        icon.*
+        FROM record_account ra, icon, classify cl
+        WHERE icon.icon_id = cl.icon_id
+        AND cl.classify_id = ra.classify_id
+        <if test="dateType == 'month'">
+            AND date_format(ra.record_time, '%Y%m') = #{startDate}
+        </if>
+        <if test="dateType == 'day'">
+            AND date_format(ra.record_time, '%Y%m%d') = #{startDate}
+        </if>
+        <if test="dateType == 'period'">
+            AND date_format(ra.record_time, '%Y%m%d') &gt;= #{startDate}
+            AND date_format(ra.record_time , '%Y%m%d') &lt;= #{endDate}
+        </if>
+        order by ra.record_time desc
+        limit #{startPage}, #{pageSize};
     </select>
 
 </mapper>

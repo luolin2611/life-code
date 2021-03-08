@@ -2,7 +2,7 @@ package cn.lifecode.frameworkcore.bean;
 
 /**
  * 状态返回
- * @author yuanmin
+ * @author rollin
  */
 public enum ResStatusEnum {
 
@@ -21,13 +21,16 @@ public enum ResStatusEnum {
     /**
      * 通用，1开头
      */
-    INCORRECT_SUBMISSION_INFORMATION("1000", "提交信息有误"),
-    LOGIN_STEP_ERROR("1001", "请按步骤流程操作"),
-    CHECK_MOBILE_VALID("1002", "手机号不合理，请输入合理的手机号"),
+
 
     /**
-     * 登录注册，2开头
+     * 用户类，2开头
      */
+    USER_ACCOUNT_NO_EXIST("2000", "账户不存在"),
+    USER_INFO_ERROR("2001", "账户登录密码错误"),
+    USER_REGISTER_USER_EXIST("2002", "用户名已存在"),
+    USER_REGISTER_EMAIL_EXIST("2003", "邮箱已存在"),
+    USER_REGISTER_MOBILE_EXIST("2004", "手机号已存在"),
 
     /**
      * 用户，3开头

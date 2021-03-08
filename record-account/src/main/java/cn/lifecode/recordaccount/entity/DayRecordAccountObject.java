@@ -3,6 +3,7 @@ package cn.lifecode.recordaccount.entity;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 记账对象
@@ -39,4 +40,8 @@ public class DayRecordAccountObject implements Serializable {
      * 图标对应图标
      */
     private Icon icon;
+    /**
+     * 记账时间
+     */
+    private Date recordTime;
 }

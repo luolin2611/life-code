@@ -22,9 +22,9 @@ public class DayRecordAccount implements Serializable {
     /**
      * 当天支出总额
      */
-    private double totalOutDay;
+    private double dayExpense;
     /**
      * 当日记账对象集合
      */
-    private List<DayRecordAccountObject> dayRecordAccountList;
+    private List<DayRecordAccountObject> dayRecordAccountObjects;
 }

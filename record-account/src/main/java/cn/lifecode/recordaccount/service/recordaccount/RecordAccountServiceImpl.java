@@ -56,53 +56,34 @@ public class RecordAccountServiceImpl implements RecordAccountService {
      * @return
      */
     @Override
-    public Response<HomeInitInfoResponse> homeInitInfo() {
+    public Response<HomeInitInfoResponse> homeInitInfo(String userId) {
         String dateStr = DateUtil.formatTime(LocalDateTime.now(), DateUtil.YMD_TIME_SPLIT_PATTERN);
         String[] dateArr = dateStr.split("-");
         //1.本月支出 （202101）
-        double moneyOutMonth = recordAccountMapper.queryTotalMoney("0", "month", dateArr[0] + dateArr[1]);
+        double moneyOutMonth = recordAccountMapper.queryTotalMoney("0", "month", dateArr[0] + dateArr[1], userId);
         //2.本月收入
-        double moneyInMonth = recordAccountMapper.queryTotalMoney("1", "month", dateArr[0] + dateArr[1]);
+        double moneyInMonth = recordAccountMapper.queryTotalMoney("1", "month", dateArr[0] + dateArr[1], userId);
         //3.查询最近3日的账单记录
-        Date currentDate = new Date();
         //过去时间
         Date passDate;
         String[] weekDays = {"星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
         List<DayRecordAccount> dayRecordAccountList = new ArrayList<>();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-        SimpleDateFormat sdf1 = new SimpleDateFormat("MM月dd日");
         DayRecordAccount dayRecordAccount;
-        List<DayRecordAccountObject> dayRecordAccountObjectList;
-        double totalOutDay;
-        // 3.1 查询当天
         Calendar calendar = Calendar.getInstance();
-        dayRecordAccount = new DayRecordAccount();
-        dayRecordAccountObjectList = recordAccountMapper.queryRecordAccountObject("day", sdf.format(currentDate), "");
-        dayRecordAccount.setDateStr(sdf1.format(currentDate) + " 今天");
-        totalOutDay = !dayRecordAccountObjectList.isEmpty() ? recordAccountMapper.queryTotalMoney("0", "day", sdf.format(currentDate)) : 0;
-        dayRecordAccount.setTotalOutDay(totalOutDay);
-        dayRecordAccount.setDayRecordAccountList(dayRecordAccountObjectList);
+        // 3.1 查询当天
+        dayRecordAccount = rawDayRecordAccount("今天", new Date(), userId);
         dayRecordAccountList.add(dayRecordAccount);
         // 3.2 查询昨天
         passDate = DateUtil.currentDateAddOrSub(DateUtil.OPRATETYPE_SUBTRACT, DateUtil.DAYTYPE_DAY, 1);
-        dayRecordAccount = new DayRecordAccount();
         calendar.setTime(passDate);
-        dayRecordAccountObjectList = recordAccountMapper.queryRecordAccountObject("day", sdf.format(passDate), "");
-        dayRecordAccount.setDateStr(sdf1.format(passDate) + " " + weekDays[(calendar.get(Calendar.DAY_OF_WEEK) - 1)]);
-        totalOutDay = !dayRecordAccountObjectList.isEmpty() ? recordAccountMapper.queryTotalMoney("0", "day", sdf.format(passDate)) : 0;
-        dayRecordAccount.setTotalOutDay(totalOutDay);
-        dayRecordAccount.setDayRecordAccountList(dayRecordAccountObjectList);
+        dayRecordAccount = rawDayRecordAccount(weekDays[(calendar.get(Calendar.DAY_OF_WEEK) - 1)], passDate, userId);
+        calendar.setTime(passDate);
         dayRecordAccountList.add(dayRecordAccount);
         // 3.3 查询前天
-        passDate = DateUtil.currentDateAddOrSub(DateUtil.OPRATETYPE_SUBTRACT, DateUtil.DAYTYPE_DAY, 2);
-        dayRecordAccount = new DayRecordAccount();
+        passDate = DateUtil.currentDateAddOrSub(DateUtil.OPRATETYPE_SUBTRACT, DateUtil.DAYTYPE_DAY, 1);
         calendar.setTime(passDate);
-        dayRecordAccountObjectList = recordAccountMapper.queryRecordAccountObject("day", sdf.format(passDate), "");
-        dayRecordAccount.setDateStr(sdf1.format(passDate) + " " + weekDays[(calendar.get(Calendar.DAY_OF_WEEK) - 1)]);
-        totalOutDay = !dayRecordAccountObjectList.isEmpty() ? recordAccountMapper.queryTotalMoney("0", "day", sdf.format(passDate)) : 0;
-        dayRecordAccount.setTotalOutDay(totalOutDay);
-        dayRecordAccount.setTotalOutDay(recordAccountMapper.queryTotalMoney("0", "day", sdf.format(passDate)));
-        dayRecordAccount.setDayRecordAccountList(dayRecordAccountObjectList);
+        dayRecordAccount = rawDayRecordAccount(weekDays[(calendar.get(Calendar.DAY_OF_WEEK) - 1)], passDate, userId);
+        calendar.setTime(passDate);
         dayRecordAccountList.add(dayRecordAccount);
         // 4.封装response对象
         HomeInitInfoResponse homeInitInfoResponse = new HomeInitInfoResponse();
@@ -179,5 +160,24 @@ public class RecordAccountServiceImpl implements RecordAccountService {
             recordAccount.setUserId(45);
             recordAccountMapper.addRecordAccount(recordAccount);
         }
+    }
+
+    /**
+     * 加工DayRecordAccount
+     *
+     * @param dayType 时间显示内容（"今天"、"星期X"）
+     * @return
+     */
+    public DayRecordAccount rawDayRecordAccount(String dayType, Date date, String userId) {
+        DayRecordAccount dayRecordAccount = new DayRecordAccount();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        SimpleDateFormat sdf1 = new SimpleDateFormat("MM月dd日");
+        List<DayRecordAccountObject> dayRecordAccountObjectList;
+        dayRecordAccountObjectList = recordAccountMapper.queryRecordAccountObject("day", sdf.format(date), "", userId);
+        dayRecordAccount.setDateStr(sdf1.format(date) + " " + dayType);
+        double totalOutDay = !dayRecordAccountObjectList.isEmpty() ? recordAccountMapper.queryTotalMoney("0", "day", sdf.format(date), userId) : 0;
+        dayRecordAccount.setDayExpense(totalOutDay);
+        dayRecordAccount.setDayRecordAccountObjects(dayRecordAccountObjectList);
+        return dayRecordAccount;
     }
 }
