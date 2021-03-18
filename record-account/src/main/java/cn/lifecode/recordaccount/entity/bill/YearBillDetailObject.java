@@ -1,11 +1,9 @@
 package cn.lifecode.recordaccount.entity.bill;
 
-import cn.lifecode.recordaccount.entity.DayRecordAccountObject;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * 年账单明细

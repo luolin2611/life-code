@@ -1,0 +1,49 @@
+#服务端口号
+server:
+  port: 10005
+
+# 配置 服务名称
+spring:
+  application:
+    name: eureka-client-zuul
+
+# 配置 eureka 地址
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:10001/eureka/
+
+
+
+# 添加ribbon的超时时间设置
+ribbon:
+  ReadTimeout: 3000
+  ConnectTimeout: 3000
+
+
+# Zuul配置
+  # zuul默认路由根据服务名全小写加路由API，如我们有BASEMICROSERVICE,通过zuul访问BASEMICROSERVICE服务API,
+    # http://IP:port/basemicroService/menu,不需配置zuul路由即可访问到接口,这样会将所有的接口都暴露出来。
+    #虽然方便性较高但安全性低。
+    #zuul.ignoredServices=* 表示禁用默认路由，只认我们自己配置的路由.
+zuul:
+  host:
+    connect-timeout-millis: 3000
+    socket-timeout-millis: 3000
+  #  ignored-services: *
+  routes:
+    #服务提供者路由信息（名字是可以自定义的，没有什么特定规则，你能区分就好）
+    user:
+      path: /user/**
+      serviceId: eureka-client-user
+    record-account:
+      path: /record-account/**
+      serviceId: eureka-client-record-account
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeout-in-milliseconds: 3000

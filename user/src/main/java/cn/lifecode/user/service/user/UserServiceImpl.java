@@ -37,6 +37,7 @@ public class UserServiceImpl implements UserService {
             LoginRes loginRes = new LoginRes();
             loginRes.setUserId(user.getUserId());
             loginRes.setUserName(user.getUserName());
+            loginRes.setRealName(user.getRealName());
             loginRes.setPersonalResume(user.getPersonalResume());
             return Response.success(loginRes, "登录成功");
         }

@@ -7,11 +7,22 @@
         <result column="classify_name" property="classifyName"/>
         <result column="add_type" property="addType"/>
         <result column="type" property="type"/>
-        <result column="icon_id" property="iconId"/>
         <result column="user_id" property="userId"/>
-        <result column="sort" property="sort"/>
-        <result column="create_time" property="createTime"/>
         <result column="update_time" property="updatTime"/>
+        <!-- 查询该分类对应的图标  一对一 -->
+        <association property="icon" javaType="cn.lifecode.recordaccount.entity.Icon">
+            <result column="icon_id" property="iconId"/>
+            <result column="icon_name" property="iconName"/>
+            <result column="update_time" property="updateTime"/>
+        </association>
+    </resultMap>
+
+    <resultMap id="classifyUser" type="cn.lifecode.recordaccount.entity.ClassifyUser">
+        <result column="classify_user_id" property="classifyUserId"/>
+        <result column="user_id" property="userId"/>
+        <result column="income_classify_ids" property="incomeClassifyIds"/>
+        <result column="expense_classify_ids" property="expenseClassifyIds"/>
+        <result column="update_time" property="updateTime"/>
     </resultMap>
 
     <!-- 添加分类 -->
@@ -28,6 +39,32 @@
                 #{classify.createTime},
                 #{classify.updatTime});
     </insert>
+
+    <!-- 查询用户分类 -->
+    <select id="queryUserClassify" resultMap="classifyUser">
+        select *
+        from classify_user
+        where user_id = #{userId}
+    </select>
+
+    <!-- 查询分类 -->
+    <select id="queryClassify" resultMap="classify">
+        select classify.*, icon.*
+        from classify, icon
+        where icon.icon_id = classify.icon_id
+        and type = #{type}
+        <if test="userId == ''">
+            <!-- 查询默认的分类 -->
+            and add_type = '0';
+        </if>
+        <if test="userId != ''">
+            and classify.icon_id in
+            <foreach collection="classifyIdsArr" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            ;
+        </if>
+    </select>
 
     <!-- 根据分类名称查询分类对象 -->
     <select id="selectClassifyByClassifyName" parameterType="string"

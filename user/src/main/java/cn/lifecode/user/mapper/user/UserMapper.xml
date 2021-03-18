@@ -43,9 +43,9 @@
     <select id="login" parameterType="cn.lifecode.user.common.dto.user.LoginReq" resultMap="user">
         select *
         from user
-        where user_name = #{loginReq.account}
+        where (user_name = #{loginReq.account}
            or email = #{loginReq.account}
-           or mobile = #{loginReq.account}
+           or mobile = #{loginReq.account})
             and password = #{loginReq.password}
             and state = '0'
     </select>

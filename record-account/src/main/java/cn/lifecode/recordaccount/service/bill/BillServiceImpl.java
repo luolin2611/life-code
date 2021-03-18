@@ -5,6 +5,7 @@ import cn.lifecode.frameworkcore.bean.Response;
 import cn.lifecode.recordaccount.common.constant.Constant;
 import cn.lifecode.recordaccount.dto.bill.QueryBillInfoRequest;
 import cn.lifecode.recordaccount.dto.bill.QueryBillInfoResponse;
+import cn.lifecode.recordaccount.entity.DayRecordAccount;
 import cn.lifecode.recordaccount.entity.bill.YearBillDetail;
 import cn.lifecode.recordaccount.entity.bill.YearBillDetailObject;
 import cn.lifecode.recordaccount.mapper.recordaccount.RecordAccountMapper;
@@ -68,8 +69,8 @@ public class BillServiceImpl implements BillService {
                 if (income != 0 || expense != 0) {
                     //有月支出或月收入 才计入
                     yearBillDetailObject = new YearBillDetailObject();
-                    yearBillDetailObject.setYear(year);
-                    yearBillDetailObject.setMonth(month + "");
+                    yearBillDetailObject.setYear(year + "年");
+                    yearBillDetailObject.setMonth(month + "月");
                     yearBillDetailObject.setExpense(expense);
                     yearBillDetailObject.setIncome(income);
                     yearBillDetailObject.setSurplus(income - expense);
@@ -93,7 +94,13 @@ public class BillServiceImpl implements BillService {
             String month = queryBillInfoRequest.getMonth();
             int pageSize = queryBillInfoRequest.getPageSize();
             int startPage = (queryBillInfoRequest.getStartPage() - 1) * pageSize;
-            queryBillInfoResponse.setMonthBillDetailList(recordAccountMapper.queryRecordAccounts(MONTH, month, "", startPage, pageSize));
+            // 查询年收入、年支出
+            double monthIncome = recordAccountMapper.queryTotalMoney(INCOME, MONTH, month, userId);
+            double monthExpense = recordAccountMapper.queryTotalMoney(EXPENSE, MONTH, month, userId);
+            List<DayRecordAccount> recordAccountsList =  recordAccountMapper.queryRecordAccounts(MONTH, month, "", startPage, pageSize, userId);
+            queryBillInfoResponse.setIncome(monthIncome);
+            queryBillInfoResponse.setExpense(monthExpense);
+            queryBillInfoResponse.setMonthBillDetailList(recordAccountsList);
         }
         // 3.时间段
         if (billType.equals(BILL_TYPE_PERIOD)) {
@@ -101,7 +108,7 @@ public class BillServiceImpl implements BillService {
             String endDate = queryBillInfoRequest.getEndDate();
             int pageSize = queryBillInfoRequest.getPageSize();
             int startPage = (queryBillInfoRequest.getStartPage() - 1) * pageSize;
-            queryBillInfoResponse.setPeriodBillDetailList(recordAccountMapper.queryRecordAccounts(PERIOD, startDate, endDate, startPage, pageSize));
+            queryBillInfoResponse.setPeriodBillDetailList(recordAccountMapper.queryRecordAccounts(PERIOD, startDate, endDate, startPage, pageSize, userId));
         }
         return Response.success(queryBillInfoResponse);
     }

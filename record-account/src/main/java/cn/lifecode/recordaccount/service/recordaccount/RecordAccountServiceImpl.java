@@ -1,10 +1,13 @@
 package cn.lifecode.recordaccount.service.recordaccount;
 
 
+import cn.lifecode.frameworkcore.bean.Request;
 import cn.lifecode.frameworkcore.bean.Response;
 import cn.lifecode.frameworkcore.dto.ResponseObject;
 import cn.lifecode.frameworkcore.util.DateUtil;
 import cn.lifecode.frameworkcore.util.ExcelPoiUtil;
+import cn.lifecode.recordaccount.dto.home.AddRecordAcctRequest;
+import cn.lifecode.recordaccount.dto.home.AddRecordAcctResponse;
 import cn.lifecode.recordaccount.dto.home.HomeInitInfoResponse;
 import cn.lifecode.recordaccount.entity.Classify;
 import cn.lifecode.recordaccount.entity.DayRecordAccount;
@@ -59,6 +62,12 @@ public class RecordAccountServiceImpl implements RecordAccountService {
     public Response<HomeInitInfoResponse> homeInitInfo(String userId) {
         String dateStr = DateUtil.formatTime(LocalDateTime.now(), DateUtil.YMD_TIME_SPLIT_PATTERN);
         String[] dateArr = dateStr.split("-");
+        //用于标记三日内是否有记录
+        boolean isQuery = false;
+        //用户查询当日是否有值
+        boolean isCurrentQuery = false;
+        // 近三日账单总数
+        int billNum = 0;
         //1.本月支出 （202101）
         double moneyOutMonth = recordAccountMapper.queryTotalMoney("0", "month", dateArr[0] + dateArr[1], userId);
         //2.本月收入
@@ -72,27 +81,42 @@ public class RecordAccountServiceImpl implements RecordAccountService {
         Calendar calendar = Calendar.getInstance();
         // 3.1 查询当天
         dayRecordAccount = rawDayRecordAccount("今天", new Date(), userId);
-        dayRecordAccountList.add(dayRecordAccount);
+        isCurrentQuery = dayRecordAccount.getDayRecordAccountObjects().size() > 0;
+        billNum += dayRecordAccount.getDayRecordAccountObjects().size();
+        if (isCurrentQuery) {
+            isQuery = true;
+            dayRecordAccountList.add(dayRecordAccount);
+        }
         // 3.2 查询昨天
         passDate = DateUtil.currentDateAddOrSub(DateUtil.OPRATETYPE_SUBTRACT, DateUtil.DAYTYPE_DAY, 1);
         calendar.setTime(passDate);
         dayRecordAccount = rawDayRecordAccount(weekDays[(calendar.get(Calendar.DAY_OF_WEEK) - 1)], passDate, userId);
         calendar.setTime(passDate);
-        dayRecordAccountList.add(dayRecordAccount);
+        isCurrentQuery = dayRecordAccount.getDayRecordAccountObjects().size() > 0;
+        billNum += dayRecordAccount.getDayRecordAccountObjects().size();
+        if (isCurrentQuery) {
+            isQuery = true;
+            dayRecordAccountList.add(dayRecordAccount);
+        }
         // 3.3 查询前天
-        passDate = DateUtil.currentDateAddOrSub(DateUtil.OPRATETYPE_SUBTRACT, DateUtil.DAYTYPE_DAY, 1);
+        passDate = DateUtil.currentDateAddOrSub(DateUtil.OPRATETYPE_SUBTRACT, DateUtil.DAYTYPE_DAY, 2);
         calendar.setTime(passDate);
         dayRecordAccount = rawDayRecordAccount(weekDays[(calendar.get(Calendar.DAY_OF_WEEK) - 1)], passDate, userId);
         calendar.setTime(passDate);
-        dayRecordAccountList.add(dayRecordAccount);
+        isCurrentQuery = dayRecordAccount.getDayRecordAccountObjects().size() > 0;
+        billNum += dayRecordAccount.getDayRecordAccountObjects().size();
+        if (isCurrentQuery) {
+            isQuery = true;
+            dayRecordAccountList.add(dayRecordAccount);
+        }
         // 4.封装response对象
         HomeInitInfoResponse homeInitInfoResponse = new HomeInitInfoResponse();
         homeInitInfoResponse.setMonthOutTotal(moneyOutMonth);
         homeInitInfoResponse.setMonthInTotal(moneyInMonth);
-        homeInitInfoResponse.setThreedayRecordAccount(dayRecordAccountList);
+        homeInitInfoResponse.setBillNum(billNum);
+        homeInitInfoResponse.setThreedayRecordAccount(isQuery ? dayRecordAccountList : new ArrayList());
         return Response.success(homeInitInfoResponse);
     }
-
 
     /**
      * 从Excel中导入数据库
@@ -118,6 +142,18 @@ public class RecordAccountServiceImpl implements RecordAccountService {
     }
 
     /**
+     * 记账功能
+     *
+     * @param request
+     * @return
+     */
+    @Override
+    public Response<AddRecordAcctResponse> addRecordAcct(Request<AddRecordAcctRequest> request) {
+        recordAccountMapper.addRecordAcct(request.getBody());
+        return Response.success("记账成功");
+    }
+
+    /**
      * @param recordList
      * @param type       0-支出，1-收入
      */
@@ -135,9 +171,7 @@ public class RecordAccountServiceImpl implements RecordAccountService {
                 //1.2 封装插入库的classify对象
                 classify = new Classify();
                 classify.setType(type);
-                classify.setSort(sort + 1);
                 classify.setUpdatTime(new Date());
-                classify.setCreateTime(new Date());
                 classify.setClassifyName(classifyName);
                 // classify.setIconId(); // 此处先不给添加iconId
                 //此处 1 表示用户添加

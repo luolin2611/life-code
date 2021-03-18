@@ -15,6 +15,9 @@ import java.util.List;
  */
 @Data
 public class QueryAllIconResponse implements Serializable {
+    /**
+     * 图标列表
+     */
     @NotNull
     private List<Icon> iconList;
 }

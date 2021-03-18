@@ -35,3 +35,19 @@
   >&nbsp;&nbsp;url: jdbc:mysql://localhost:3306/record_account?zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai <br/>
   >&nbsp;&nbsp;username: root <br/>
   >&nbsp;&nbsp;password: root123456 <br/>
+  ####5.2 提交Git代码时报错
+  >报错内容：<br/>
+  > fatal: unable to access 'https://github.com/luolin2611/life-code/': LibreSSL SSL_connect: SSL_ERROR_SYSCALL in connection to github.com:443<br/>
+  > 解决方案：<br/>
+  > 找到代理的端口号：
+  > ![img_1.png](img_1.png)<br/>
+  > 执行命令：
+  > git config --global --add remote.origin.proxy "127.0.0.1:7890"
+
+* 6 其它
+  ####6.1 生成banner
+  > 地址： https://www.bootschool.net/ascii
+  > 选项:  3d-ascii
+  #### 6.2 打包相关
+  > mvn clean package -P sit1
+  > 

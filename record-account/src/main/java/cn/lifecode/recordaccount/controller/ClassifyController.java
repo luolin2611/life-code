@@ -4,6 +4,8 @@ import cn.lifecode.frameworkcore.bean.Request;
 import cn.lifecode.frameworkcore.bean.Response;
 import cn.lifecode.frameworkcore.dto.ResponseObject;
 import cn.lifecode.recordaccount.dto.classify.InitClassifyRequest;
+import cn.lifecode.recordaccount.dto.classify.QueryClassifyRequest;
+import cn.lifecode.recordaccount.dto.classify.QueryClassifyResponse;
 import cn.lifecode.recordaccount.service.classify.ClassifyService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,5 +34,17 @@ public class ClassifyController {
     @PostMapping("/initClassify")
     public Response<ResponseObject> initClassify(@RequestBody Request<InitClassifyRequest> request) {
         return classifyService.addClassify(request.getBody().getUserId());
+    }
+
+    /**
+     * 查询分类列表及图标
+     * 根据UserId 是否为空：查询默认图标 或 用户图标
+     *
+     * @param request
+     * @return
+     */
+    @PostMapping("/queryClassify")
+    public Response<QueryClassifyResponse> queryClassify(@RequestBody Request<QueryClassifyRequest> request) {
+        return classifyService.queryClassify(request);
     }
 }

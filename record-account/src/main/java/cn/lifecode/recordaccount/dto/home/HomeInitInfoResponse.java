@@ -3,6 +3,7 @@ package cn.lifecode.recordaccount.dto.home;
 import cn.lifecode.recordaccount.entity.DayRecordAccount;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 
@@ -17,13 +18,21 @@ public class HomeInitInfoResponse implements Serializable {
     /**
      * 本月总支出
      */
+    @NotNull
     private double monthOutTotal;
     /**
      * 本月总收入
      */
+    @NotNull
     private double monthInTotal;
     /**
      * 此处的需求是：最近三日记账对象
      */
+    @NotNull
     private List<DayRecordAccount> threedayRecordAccount;
+    /**
+     * 近三日账单总数
+     */
+    @NotNull
+    private int billNum;
 }

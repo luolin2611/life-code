@@ -31,6 +31,7 @@
 
     <build>
         <finalName>eureka-record-account</finalName>
+        <!-- maven 插件 -->
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -47,6 +48,7 @@
                 </executions>
             </plugin>
         </plugins>
+        <!--  使用mapper 操作数据库文件配置 -->
         <resources>
             <resource>
                 <directory>src/main/java</directory>

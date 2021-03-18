@@ -45,7 +45,7 @@ public class QueryBillInfoRequest implements Serializable {
      */
     private String endDate;
     /**
-     * 请求页索引 （从1开始表示第一页）
+     * 请求页索引 （从1开始表示第一页）- 在代码里面做了减法处理
      */
     private int startPage;
     /**

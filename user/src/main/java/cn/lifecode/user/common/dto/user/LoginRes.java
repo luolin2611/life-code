@@ -22,6 +22,11 @@ public class LoginRes implements Serializable {
     @NotNull
     private String userName;
     /**
+     * 昵称
+     */
+    @NotNull
+    private String realName;
+    /**
      * 个人简介
      */
     @NotNull

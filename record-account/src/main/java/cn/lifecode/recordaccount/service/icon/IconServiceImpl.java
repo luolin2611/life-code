@@ -1,10 +1,15 @@
 package cn.lifecode.recordaccount.service.icon;
 
 
+import cn.lifecode.frameworkcore.bean.Request;
 import cn.lifecode.frameworkcore.bean.Response;
 import cn.lifecode.frameworkcore.dto.ResponseObject;
+import cn.lifecode.recordaccount.dto.icon.QueryAllIconRequest;
 import cn.lifecode.recordaccount.dto.icon.QueryAllIconResponse;
+import cn.lifecode.recordaccount.dto.icon.QueryAllIconUserRequest;
+import cn.lifecode.recordaccount.dto.icon.QueryAllIconUserResponse;
 import cn.lifecode.recordaccount.entity.Icon;
+import cn.lifecode.recordaccount.entity.IconUser;
 import cn.lifecode.recordaccount.mapper.icon.IconMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +28,7 @@ import java.util.List;
 public class IconServiceImpl implements IconService {
     private final IconMapper iconMapper;
 
-    public IconServiceImpl(IconMapper iconMapper) {
+    public IconServiceImpl(IconMapper iconMapper, IconMapper aa) {
         this.iconMapper = iconMapper;
     }
 
@@ -41,14 +46,27 @@ public class IconServiceImpl implements IconService {
     }
 
     /**
-     * 查询所有图标
+     * 查询默认所有图标
      *
      * @return
      */
     @Override
-    public Response<QueryAllIconResponse> queryAllIcon() {
+    public Response<QueryAllIconResponse> queryAllIcon(Request<QueryAllIconRequest> request) {
         QueryAllIconResponse queryAllIconResponse = new QueryAllIconResponse();
         List<Icon> iconList = iconMapper.queryAllIcon();
+        queryAllIconResponse.setIconList(iconList);
+        return Response.success(queryAllIconResponse);
+    }
+
+    /**
+     * 查询用户所有图标
+     *
+     * @return
+     */
+    @Override
+    public Response<QueryAllIconUserResponse> queryAllIconUser(Request<QueryAllIconUserRequest> request) {
+        QueryAllIconUserResponse queryAllIconResponse = new QueryAllIconUserResponse();
+        List<IconUser> iconList = iconMapper.queryAllIconUser(request.getBody().getUserId());
         queryAllIconResponse.setIconList(iconList);
         return Response.success(queryAllIconResponse);
     }

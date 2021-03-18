@@ -1,0 +1,22 @@
+server:
+  port: 9004
+
+spring:
+  application:
+    name: eureka-client-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: eureka-client-user
+          uri: http://localhost:10003/
+          predicates: -Path=/user/**
+
+# 打印 mysql 日志
+logging:
+  level:
+    root: debug
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:10001/eureka/

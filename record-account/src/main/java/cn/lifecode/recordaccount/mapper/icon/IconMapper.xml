@@ -5,6 +5,16 @@
     <resultMap id="icon" type="cn.lifecode.recordaccount.entity.Icon">
         <result column="icon_id" property="iconId"/>
         <result column="icon_name" property="iconName"/>
+        <result column="icon_name_cn" property="iconNameCn"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <resultMap id="iconUser" type="cn.lifecode.recordaccount.entity.IconUser">
+        <result column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="icon_id" property="iconId"/>
+        <result column="icon_name" property="iconName"/>
+        <result column="icon_name_cn" property="iconNameCn"/>
         <result column="update_time" property="updateTime"/>
     </resultMap>
 
@@ -17,9 +27,17 @@
                 #{icon.updateTime});
     </insert>
 
-    <!-- 查询所有icon -->
+    <!-- 查询所有系统默认icon -->
     <select id="queryAllIcon" resultMap="icon">
         select *
         from `record_account`.`icon`;
     </select>
+
+    <!--     查询所有用户icon-->
+    <select id="queryAllIconUser" resultMap="iconUser">
+        select *
+        from `record_account`.`icon_user`
+        where user_id = #{userId};
+    </select>
+
 </mapper>

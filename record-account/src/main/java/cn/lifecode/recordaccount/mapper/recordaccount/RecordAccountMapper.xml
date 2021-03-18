@@ -65,7 +65,8 @@
 
     <!-- 查询总余额 - dateType: year - 年, month - 月, day - 日 -->
     <select id="queryTotalMoney" resultType="double">
-        select COALESCE(sum(bill_money),0) from record_account where classify_type = #{classifyType} and user_id = #{userId}
+        select COALESCE(sum(bill_money),0) from record_account where classify_type = #{classifyType} and user_id =
+        #{userId}
         <if test="dateType == 'year'">
             and date_format(record_time , '%Y') = #{dateTime}
         </if>
@@ -124,6 +125,7 @@
         FROM record_account ra, icon, classify cl
         WHERE icon.icon_id = cl.icon_id
         AND cl.classify_id = ra.classify_id
+        AND ra.user_id = #{userId}
         <if test="dateType == 'month'">
             AND date_format(ra.record_time, '%Y%m') = #{startDate}
         </if>
@@ -137,5 +139,27 @@
         order by ra.record_time desc
         limit #{startPage}, #{pageSize};
     </select>
+
+    <!-- 记账 -->
+    <insert id="addRecordAcct" parameterType="cn.lifecode.recordaccount.dto.home.AddRecordAcctRequest"
+            keyProperty="record_account_id"
+            useGeneratedKeys="true">
+        insert into record_account(bill_money,
+                                   classify_id,
+                                   classify_name,
+                                   classify_type,
+                                   user_id,
+                                   remark,
+                                   record_time,
+                                   update_time)
+        values (#{addRecordAcctRequest.billMoney},
+                #{addRecordAcctRequest.classifyId},
+                #{addRecordAcctRequest.classifyName},
+                #{addRecordAcctRequest.classifyType},
+                #{addRecordAcctRequest.userId},
+                #{addRecordAcctRequest.remark},
+                now(),
+                now());
+    </insert>
 
 </mapper>

@@ -5,3 +5,9 @@
 /music/target
 /*/target
 /*/*/target
+
+# 暂时忽略
+/zuul
+/gateway
+/back-music
+/front-music

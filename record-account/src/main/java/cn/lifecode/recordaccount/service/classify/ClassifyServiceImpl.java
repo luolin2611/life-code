@@ -1,9 +1,13 @@
 package cn.lifecode.recordaccount.service.classify;
 
+import cn.lifecode.frameworkcore.bean.Request;
 import cn.lifecode.frameworkcore.bean.Response;
 import cn.lifecode.frameworkcore.dto.ResponseObject;
 import cn.lifecode.frameworkcore.util.ExcelPoiUtil;
+import cn.lifecode.recordaccount.dto.classify.QueryClassifyRequest;
+import cn.lifecode.recordaccount.dto.classify.QueryClassifyResponse;
 import cn.lifecode.recordaccount.entity.Classify;
+import cn.lifecode.recordaccount.entity.ClassifyUser;
 import cn.lifecode.recordaccount.mapper.classify.ClassifyMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,6 +54,33 @@ public class ClassifyServiceImpl implements ClassifyService {
     }
 
     /**
+     * 查询分类对象
+     *
+     * @param request
+     * @return
+     */
+    @Override
+    public Response<QueryClassifyResponse> queryClassify(Request<QueryClassifyRequest> request) {
+        //1.取出参数
+        QueryClassifyRequest queryClassifyRequest = request.getBody();
+        String userId = queryClassifyRequest.getUserId();
+        String type = queryClassifyRequest.getType();
+        //2.如果 userId != '' 查询用户的分类列表
+        String[] classifyIdsArr = null;
+        if (!"".equals(userId)) {
+            ClassifyUser classifyUser = classifyMapper.queryUserClassify(userId);
+            String classifyIds = "0".equals(type) ? classifyUser.getExpenseClassifyIds() : classifyUser.getIncomeClassifyIds();
+            classifyIdsArr = classifyIds.split(",");
+        }
+        //3.查询数据
+        List<Classify> classifyList = classifyMapper.queryClassify(userId, type, classifyIdsArr);
+        QueryClassifyResponse queryClassifyResponse = new QueryClassifyResponse();
+        queryClassifyResponse.setClassifyList(classifyList);
+        //4.返回数据
+        return Response.success(queryClassifyResponse);
+    }
+
+    /**
      * @param classifyList
      * @param type         0-支出，1-收入
      * @param userId
@@ -66,10 +97,7 @@ public class ClassifyServiceImpl implements ClassifyService {
             //0表示预设
             classify.setAddType("0");
             classify.setUserId(userId);
-            classify.setIconId((int) Double.parseDouble(iconId));
             classify.setClassifyName((String) tempMap.get("classify_name"));
-            classify.setSort((int) Double.parseDouble(sort));
-            classify.setCreateTime(date);
             classify.setUpdatTime(date);
             classify.setType(type);
             classifyMapper.addClassify(classify);

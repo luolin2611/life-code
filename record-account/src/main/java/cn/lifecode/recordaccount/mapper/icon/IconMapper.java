@@ -1,6 +1,7 @@
 package cn.lifecode.recordaccount.mapper.icon;
 
 import cn.lifecode.recordaccount.entity.Icon;
+import cn.lifecode.recordaccount.entity.IconUser;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -25,4 +26,11 @@ public interface IconMapper {
      * @return
      */
     List<Icon> queryAllIcon();
+
+    /**
+     * 查询所有图标
+     *
+     * @return
+     */
+    List<IconUser> queryAllIconUser(@Param("userId") String userId);
 }

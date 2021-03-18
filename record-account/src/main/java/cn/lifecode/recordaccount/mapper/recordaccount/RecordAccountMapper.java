@@ -1,5 +1,6 @@
 package cn.lifecode.recordaccount.mapper.recordaccount;
 
+import cn.lifecode.recordaccount.dto.home.AddRecordAcctRequest;
 import cn.lifecode.recordaccount.entity.DayRecordAccount;
 import cn.lifecode.recordaccount.entity.DayRecordAccountObject;
 import cn.lifecode.recordaccount.entity.RecordAccount;
@@ -65,6 +66,15 @@ public interface RecordAccountMapper {
             @Param("startDate") String startDate,
             @Param("endDate") String endDate,
             @Param("startPage") int startPage,
-            @Param("pageSize") int pageSize
+            @Param("pageSize") int pageSize,
+            @Param("userId") String userId
     );
+
+    /**
+     * 记账
+     *
+     * @param addRecordAcctRequest
+     */
+    void addRecordAcct(@Param("addRecordAcctRequest") AddRecordAcctRequest addRecordAcctRequest);
+
 }

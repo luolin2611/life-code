@@ -30,22 +30,13 @@ public class Classify implements Serializable {
      */
     private String addType;
     /**
-     * 图标ID
+     * 图标对象
      */
-    private Integer iconId;
+    private Icon icon;
     /**
      * 用户ID
      */
     private Integer userId;
-    /**
-     * 排序
-     * 存放当前的顺序
-     */
-    private Integer sort;
-    /**
-     * 创建时间
-     */
-    private Date createTime;
     /**
      * 更新时间
      */
