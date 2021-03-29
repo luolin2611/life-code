@@ -2,6 +2,14 @@ server:
   port: 10004
   servlet:
     context-path: /record-account #根路径
+    #结局中文乱码问题
+    encoding:
+      force: true
+      charset: UTF-8
+      enabled: true
+  #结局中文乱码问题
+  tomcat:
+    uri-encoding: utf-8
 
 spring:
   application:
@@ -10,7 +18,10 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver #mysql驱动
     url: jdbc:mysql://localhost:3306/record_account?zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
     username: root
+    #本地服务器
     password: root123456
+    #阿里服务器
+#    password: 123456
 
 eureka:
   client:

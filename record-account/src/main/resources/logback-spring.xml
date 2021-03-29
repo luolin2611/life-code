@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 日志级别从低到高 TRACE<DEBUG<INFO<WARN<ERROR<FATAL -->
+<!-- scan: 设置为true时，配置文件如果发生改变，将会被重新加载，默认为true -->
+<!-- scanPeriod:设置检测配置文件是否有修改的时间间隔，默认为1分钟 -->
+<!-- debug:设置为true时，将打印logback内部日志信息，实时查看logbcak运行状态，默认为false -->
+<configuration  scan="true" scanPeriod="60 seconds" debug="false">
+    <property name="APP_NAME" value="record-account"/>
+    <property name="LOG_DIR" value="~/Desktop/applog/log"/>
+<!--    <property name="LOG_DIR" value="C:/log/record-account"/>-->
+    <property name="LOG_FILE_NAME_PATTERN" value="record-account_%d{yyyy-MM-dd}_%i" />
+
+    <property name="CONSOLE_LAYOUT_PATTERN" value="[%magenta(%d{yyyy-MM-dd HH:mm:ss.SSS})][%highlight(%-5level)][001][][][%yellow(%thread)][%green(%logger:%L)][][%msg]%n"/>
+    <property name="FILE_LAYOUT_PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss.SSS}][%-5level][001][][][%thread][%logger:%L][][%msg]%n" />
+    <property name="DATE_PATTERN" value="%d{yyyy-MM-dd}"/>
+    <contextName>${APP_NAME}</contextName>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <layout name="StandardFormat" class="ch.qos.logback.classic.PatternLayout">
+            <pattern>${CONSOLE_LAYOUT_PATTERN}</pattern>
+        </layout>
+    </appender>
+
+    <appender name="INFO_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/${APP_NAME}/bank.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/${APP_NAME}/${DATE_PATTERN}/${LOG_FILE_NAME_PATTERN}.log.zip
+            </fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy	class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>1024MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>150</maxHistory>
+        </rollingPolicy>
+        <layout>
+            <pattern>${FILE_LAYOUT_PATTERN}</pattern>
+        </layout>
+    </appender>
+
+    <root level="DEBUG">
+        <appender-ref ref="CONSOLE" />
+    </root>
+    <root level="INFO">
+        <appender-ref ref="INFO_LOG" />
+    </root>
+
+</configuration>

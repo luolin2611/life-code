@@ -6,12 +6,15 @@ import cn.lifecode.recordaccount.common.constant.Constant;
 import cn.lifecode.recordaccount.dto.bill.QueryBillInfoRequest;
 import cn.lifecode.recordaccount.dto.bill.QueryBillInfoResponse;
 import cn.lifecode.recordaccount.entity.DayRecordAccount;
+import cn.lifecode.recordaccount.entity.DayRecordAccountObject;
 import cn.lifecode.recordaccount.entity.bill.YearBillDetail;
 import cn.lifecode.recordaccount.entity.bill.YearBillDetailObject;
 import cn.lifecode.recordaccount.mapper.recordaccount.RecordAccountMapper;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -97,7 +100,8 @@ public class BillServiceImpl implements BillService {
             // 查询年收入、年支出
             double monthIncome = recordAccountMapper.queryTotalMoney(INCOME, MONTH, month, userId);
             double monthExpense = recordAccountMapper.queryTotalMoney(EXPENSE, MONTH, month, userId);
-            List<DayRecordAccount> recordAccountsList =  recordAccountMapper.queryRecordAccounts(MONTH, month, "", startPage, pageSize, userId);
+            List<DayRecordAccountObject> dayRecordAccountObjectList = recordAccountMapper.queryRecordAccountObject(MONTH, month, "", startPage, pageSize, userId);
+            List<DayRecordAccount> recordAccountsList = processDayRecordAccountList(dayRecordAccountObjectList);
             queryBillInfoResponse.setIncome(monthIncome);
             queryBillInfoResponse.setExpense(monthExpense);
             queryBillInfoResponse.setMonthBillDetailList(recordAccountsList);
@@ -113,4 +117,88 @@ public class BillServiceImpl implements BillService {
         return Response.success(queryBillInfoResponse);
     }
 
+    /**
+     * 处理返回的list
+     *
+     * @param dayRecordAccountObjectList
+     * @return
+     */
+    private List<DayRecordAccount> processDayRecordAccountList(List<DayRecordAccountObject> dayRecordAccountObjectList) {
+        //存放本次返回集合
+        List<DayRecordAccount> list = new ArrayList<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("MM月dd日");
+        String[] weekDays = {"星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
+        if (dayRecordAccountObjectList.isEmpty()) {
+            return list;
+        }
+
+        //存放的是当天时间（03月19日）
+        String currentDate = "";
+        //当天总支出
+        double dayExpense = 0;
+        DayRecordAccountObject object;
+        // 如果是当天和第二天的临界值，则使用该对象进行过渡
+        DayRecordAccountObject tempObject = null;
+        Calendar calendar = Calendar.getInstance();
+        //存放当天的集合
+        List<DayRecordAccountObject> dayRecordAccountObjects = null;
+        //存放当前对象
+        DayRecordAccount dayRecordAccount = null;
+        for (int i = 0; i < dayRecordAccountObjectList.size(); i++) {
+            object = dayRecordAccountObjectList.get(i);
+            calendar.setTime(object.getRecordTime());
+            if (dayRecordAccountObjects == null) {
+                // 表示新的一天
+                currentDate = sdf.format(object.getRecordTime());
+                if ("0".equals(object.getClassifyType())) {
+                    dayExpense += Double.parseDouble(object.getBillMoney());
+                }
+                dayRecordAccountObjects = new ArrayList<>();
+                dayRecordAccount = new DayRecordAccount();
+                //临界值不为空，将上次做操作的今天第一条插入
+                if (tempObject != null) {
+                    dayRecordAccountObjects.add(tempObject);
+                }
+                //向当日对象中封装值
+                dayRecordAccount.setDateStr(sdf.format(object.getRecordTime()) + " " + weekDays[calendar.get(Calendar.DAY_OF_WEEK) - 1]);
+                dayRecordAccount.setDayExpense(dayExpense);
+                dayRecordAccountObjects.add(object);
+                // 如果是最后一条也只有一条
+                if (dayRecordAccountObjectList.size() == (i + 1)) {
+                    //最后一条直接封装对象
+                    dayRecordAccount.setDayRecordAccountObjects(dayRecordAccountObjects);
+                    list.add(dayRecordAccount);
+                }
+            } else {
+                // 表示之前操作过的一天 （比较之前记录的时间 和 当前时间是否相同）
+                if (currentDate.equals(sdf.format(object.getRecordTime()))) {
+                    //表示还是之前的一天  置空临界对象
+                    tempObject = null;
+                    //表示是当天对象继续封装当天对象
+                    dayRecordAccountObjects.add(object);
+                    if (dayRecordAccountObjectList.size() == (i + 1)) {
+                        //最后一条直接封装对象
+                        dayRecordAccount.setDayRecordAccountObjects(dayRecordAccountObjects);
+                        list.add(dayRecordAccount);
+                    }
+                } else {
+                    //表示第二天 （1.将之前的写入，2.如果是最后一条 ，3，置空相应的对象 并 将今天的一条对象进行保存，在下一次进入的时候填充）
+                    // 1.将之前的日对象写入
+                    dayRecordAccount.setDayRecordAccountObjects(dayRecordAccountObjects);
+                    list.add(dayRecordAccount);
+                    //2.最后一条直接封装对象
+                    if (dayRecordAccountObjectList.size() == (i + 1)) {
+                        dayRecordAccountObjects.add(object);
+                        dayRecordAccount.setDayRecordAccountObjects(dayRecordAccountObjects);
+                        list.add(dayRecordAccount);
+                    }
+                    // 3.置空相应对象 并 将今天的一条对象进行保存，在下一次进入的时候填充
+                    tempObject = object;
+                    dayRecordAccountObjects = null;
+                    dayRecordAccount = null;
+                }
+            }
+        }
+        return list;
+    }
 }

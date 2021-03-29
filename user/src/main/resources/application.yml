@@ -8,9 +8,11 @@ spring:
     name: eureka-client-user
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver #mysql驱动
-    url: jdbc:mysql://localhost:3306/user
+    url: jdbc:mysql://localhost:3306/user?zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
     username: root
     password: root123456
+    #阿里服务器
+#    password: 123456
 
 # 打印 mysql 日志
 logging:

@@ -26,6 +26,7 @@
         <result column="record_time" property="recordTime"/>
         <!-- 一对一 -->
         <association property="icon" javaType="cn.lifecode.recordaccount.entity.Icon">
+            <result column="icon_id" property="iconId"/>
             <result column="icon_name" property="iconName"/>
         </association>
     </resultMap>
@@ -88,6 +89,7 @@
         ra.remark,
         ra.bill_money,
         icon.icon_name,
+        icon.icon_id,
         ra.record_time
         FROM record_account ra, icon, classify cl
         WHERE icon.icon_id = cl.icon_id
@@ -103,7 +105,11 @@
             AND date_format(ra.record_time, '%Y%m%d') &gt;= #{startDate}
             AND date_format(ra.record_time , '%Y%m%d') &lt;= #{endDate}
         </if>
-        order by ra.record_time desc;
+        order by ra.record_time desc
+        <if test="pageSize != 0">
+            <!-- 不需要分页 -->
+            limit #{startPage}, #{pageSize};
+        </if>
     </select>
 
     <!-- 查询recordAccounts -->

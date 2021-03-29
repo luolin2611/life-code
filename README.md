@@ -43,11 +43,26 @@
   > ![img_1.png](img_1.png)<br/>
   > 执行命令：
   > git config --global --add remote.origin.proxy "127.0.0.1:7890"
-
+  ####5.3 本地打包正常，服务器乱码
+  >说明：注意你的服务器编码方式，linux系统的服务器编码默认是utf-8，对于是windows的服务器默认不是utf-8。所以在启动的时候需要设置编码方式。<br/>
+  >输入命令：$ java -Dfile.encoding=utf-8 -jar xxx.jar
 * 6 其它
   ####6.1 生成banner
   > 地址： https://www.bootschool.net/ascii
   > 选项:  3d-ascii
   #### 6.2 打包相关
   > mvn clean package -P sit1
-  > 
+  >
+  #### 6.3 soar举例
+  ```
+    if (dayRecordAccountObjectList.size() <= 0) {
+      return list;
+    }
+  
+    Collection.isEmpty() should be used to test for emptiness
+    
+    if (dayRecordAccountObjectList.isEmpty()) {
+      return list;
+    }
+  ```
+        

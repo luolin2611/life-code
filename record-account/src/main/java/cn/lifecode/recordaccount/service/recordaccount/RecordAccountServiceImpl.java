@@ -207,7 +207,7 @@ public class RecordAccountServiceImpl implements RecordAccountService {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         SimpleDateFormat sdf1 = new SimpleDateFormat("MM月dd日");
         List<DayRecordAccountObject> dayRecordAccountObjectList;
-        dayRecordAccountObjectList = recordAccountMapper.queryRecordAccountObject("day", sdf.format(date), "", userId);
+        dayRecordAccountObjectList = recordAccountMapper.queryRecordAccountObject("day", sdf.format(date), "", 0, 0, userId);
         dayRecordAccount.setDateStr(sdf1.format(date) + " " + dayType);
         double totalOutDay = !dayRecordAccountObjectList.isEmpty() ? recordAccountMapper.queryTotalMoney("0", "day", sdf.format(date), userId) : 0;
         dayRecordAccount.setDayExpense(totalOutDay);
