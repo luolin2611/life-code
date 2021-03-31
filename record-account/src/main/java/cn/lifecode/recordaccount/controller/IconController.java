@@ -5,8 +5,6 @@ import cn.lifecode.frameworkcore.bean.Response;
 import cn.lifecode.frameworkcore.dto.ResponseObject;
 import cn.lifecode.recordaccount.dto.icon.QueryAllIconRequest;
 import cn.lifecode.recordaccount.dto.icon.QueryAllIconResponse;
-import cn.lifecode.recordaccount.dto.icon.QueryAllIconUserRequest;
-import cn.lifecode.recordaccount.dto.icon.QueryAllIconUserResponse;
 import cn.lifecode.recordaccount.entity.Icon;
 import cn.lifecode.recordaccount.service.icon.IconService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -49,15 +47,5 @@ public class IconController {
     @PostMapping("/queryAllIcon")
     public Response<QueryAllIconResponse> queryAllIcon(@RequestBody Request<QueryAllIconRequest> request) {
         return iconService.queryAllIcon(request);
-    }
-
-    /**
-     * 查询所有用户图标
-     *
-     * @return
-     */
-    @PostMapping("/queryAllIconUser")
-    public Response<QueryAllIconUserResponse> queryAllIconUser(@RequestBody Request<QueryAllIconUserRequest> request) {
-        return iconService.queryAllIconUser(request);
     }
 }

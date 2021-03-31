@@ -44,10 +44,10 @@
         select *
         from user
         where (user_name = #{loginReq.account}
-           or email = #{loginReq.account}
-           or mobile = #{loginReq.account})
-            and password = #{loginReq.password}
-            and state = '0'
+            or email = #{loginReq.account}
+            or mobile = #{loginReq.account})
+          and password = #{loginReq.password}
+          and state = '0'
     </select>
 
     <!-- 查询用户通过用户名 -->
@@ -55,7 +55,7 @@
         select *
         from user
         where user_name = #{userName}
-            and state = '0'
+          and state = '0'
     </select>
 
     <!-- 查询用户通过邮箱 -->
@@ -63,7 +63,7 @@
         select *
         from user
         where email = #{email}
-            and state = '0'
+          and state = '0'
     </select>
 
     <!-- 查询用户通过手机号 -->
@@ -71,7 +71,7 @@
         select *
         from user
         where mobile = #{mobile}
-            and state = '0'
+          and state = '0'
     </select>
 
     <!-- 注册用户 -->

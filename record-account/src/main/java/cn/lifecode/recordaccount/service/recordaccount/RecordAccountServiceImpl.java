@@ -125,9 +125,10 @@ public class RecordAccountServiceImpl implements RecordAccountService {
      */
     @Override
     public Response<ResponseObject> excelConversionToDataBase() {
-//        String excelFilePath = "/Volumes/FILE_WORK/work/Code/SpringBoot/life-code/folder/recordaccount/网易有钱记账数据20180119-20190118.xlsx";
+        String excelFilePath = "/Volumes/FILE_WORK/work/Code/SpringBoot/life-code/folder/recordaccount/网易有钱记账数据20180119-20190118.xlsx";
 //        String excelFilePath = "/Volumes/FILE_WORK/work/Code/SpringBoot/life-code/folder/recordaccount/网易有钱记账数据20190119-20200118.xlsx";
-        String excelFilePath = "/Volumes/FILE_WORK/work/Code/SpringBoot/life-code/folder/recordaccount/网易有钱记账数据20200119-20210118.xlsx";
+//        String excelFilePath = "/Volumes/FILE_WORK/work/Code/SpringBoot/life-code/folder/recordaccount/网易有钱记账数据20200119-20210118.xlsx";
+//        String excelFilePath = "/Volumes/FILE_WORK/work/Code/SpringBoot/life-code/folder/recordaccount/网易有钱记账数据20210119-20210331.xlsx";
         String[] columns = new String[]{"record_time", "classify_name", "bill_money", "remark"};
         List list = ExcelPoiUtil.getExcelToList(excelFilePath, columns);
         List recordList;
@@ -149,7 +150,11 @@ public class RecordAccountServiceImpl implements RecordAccountService {
      */
     @Override
     public Response<AddRecordAcctResponse> addRecordAcct(Request<AddRecordAcctRequest> request) {
-        recordAccountMapper.addRecordAcct(request.getBody());
+        AddRecordAcctRequest addRecordAcctRequest = request.getBody();
+        Date date = DateUtil.returnDateFromString(addRecordAcctRequest.getRecordTimeStr(), DateUtil.FULL_TIME_PATTERN);
+        addRecordAcctRequest.setRecordTime(date);
+        addRecordAcctRequest.setUpdateTime(date);
+        recordAccountMapper.addRecordAcct(addRecordAcctRequest);
         return Response.success("记账成功");
     }
 
@@ -166,9 +171,7 @@ public class RecordAccountServiceImpl implements RecordAccountService {
             Classify classify = classifyMapper.selectClassifyByClassifyName(classifyName.trim());
             //1.如果classify为空，则新增分类
             if (classify == null) {
-                // 1.1 查询当前分类的排序序号
-                int sort = classifyMapper.querySortByUserIdAndType(45, type);
-                //1.2 封装插入库的classify对象
+                //1.1 封装插入库的classify对象
                 classify = new Classify();
                 classify.setType(type);
                 classify.setUpdatTime(new Date());
@@ -178,7 +181,7 @@ public class RecordAccountServiceImpl implements RecordAccountService {
                 classify.setAddType("1");
                 classify.setUserId(45);
                 classifyMapper.addClassify(classify);
-                // 1.3 再次查询最新的分类信息
+                // 1.2 再次查询最新的分类信息
                 classify = classifyMapper.selectClassifyByClassifyName(classifyName.trim());
             }
             //写入记账列表

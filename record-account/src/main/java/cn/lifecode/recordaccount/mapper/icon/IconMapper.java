@@ -26,11 +26,4 @@ public interface IconMapper {
      * @return
      */
     List<Icon> queryAllIcon();
-
-    /**
-     * 查询所有图标
-     *
-     * @return
-     */
-    List<IconUser> queryAllIconUser(@Param("userId") String userId);
 }

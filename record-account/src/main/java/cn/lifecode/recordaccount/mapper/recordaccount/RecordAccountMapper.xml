@@ -164,8 +164,8 @@
                 #{addRecordAcctRequest.classifyType},
                 #{addRecordAcctRequest.userId},
                 #{addRecordAcctRequest.remark},
-                now(),
-                now());
+                #{addRecordAcctRequest.recordTime},
+                #{addRecordAcctRequest.updateTime});
     </insert>
 
 </mapper>

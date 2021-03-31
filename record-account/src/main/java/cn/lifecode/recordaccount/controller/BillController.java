@@ -4,6 +4,8 @@ import cn.lifecode.frameworkcore.bean.Request;
 import cn.lifecode.frameworkcore.bean.Response;
 import cn.lifecode.recordaccount.dto.bill.QueryBillInfoRequest;
 import cn.lifecode.recordaccount.dto.bill.QueryBillInfoResponse;
+import cn.lifecode.recordaccount.dto.bill.QueryMonthIncomeExpenseListRequest;
+import cn.lifecode.recordaccount.dto.bill.QueryMonthIncomeExpenseListResponse;
 import cn.lifecode.recordaccount.service.bill.BillService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,6 +41,13 @@ public class BillController {
         return billService.queryBillInfo(request);
     }
 
-
-    //2.根据以上ABC 类型进行查询 B-->返回每月 收入/支出 和 每日的记账对象；AC --> 返回每日的记账对象。
+    /**
+     * 查询 月支出/月收入 列表
+     *
+     * @return
+     */
+    @PostMapping("/queryMonthIncomeExpenseList")
+    public Response<QueryMonthIncomeExpenseListResponse> queryMonthIncomeExpenseList(@RequestBody Request<QueryMonthIncomeExpenseListRequest> request){
+        return billService.queryMonthIncomeExpenseList(request);
+    }
 }

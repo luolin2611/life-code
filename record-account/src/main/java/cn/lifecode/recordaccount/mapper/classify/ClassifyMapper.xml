@@ -28,15 +28,12 @@
     <!-- 添加分类 -->
     <insert id="addClassify" parameterType="cn.lifecode.recordaccount.entity.Classify" keyProperty="classify_id"
             useGeneratedKeys="true">
-        insert into `record_account`.`classify` (`classify_name`, `add_type`, `type`, `icon_id`, `user_id`, `sort`,
-                                                 `create_time`, `updat_time`)
+        insert into `record_account`.`classify` (`classify_name`, `add_type`, `type`, `icon_id`, `user_id`,`updat_time`)
         values (#{classify.classifyName},
                 #{classify.addType},
                 #{classify.type},
-                #{classify.iconId},
+                #{classify.icon.iconId},
                 #{classify.userId},
-                #{classify.sort},
-                #{classify.createTime},
                 #{classify.updatTime});
     </insert>
 

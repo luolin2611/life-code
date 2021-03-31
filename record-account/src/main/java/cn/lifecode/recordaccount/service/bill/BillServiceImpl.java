@@ -2,19 +2,25 @@ package cn.lifecode.recordaccount.service.bill;
 
 import cn.lifecode.frameworkcore.bean.Request;
 import cn.lifecode.frameworkcore.bean.Response;
+import cn.lifecode.frameworkcore.util.DateUtil;
 import cn.lifecode.recordaccount.common.constant.Constant;
 import cn.lifecode.recordaccount.dto.bill.QueryBillInfoRequest;
 import cn.lifecode.recordaccount.dto.bill.QueryBillInfoResponse;
+import cn.lifecode.recordaccount.dto.bill.QueryMonthIncomeExpenseListRequest;
+import cn.lifecode.recordaccount.dto.bill.QueryMonthIncomeExpenseListResponse;
 import cn.lifecode.recordaccount.entity.DayRecordAccount;
 import cn.lifecode.recordaccount.entity.DayRecordAccountObject;
+import cn.lifecode.recordaccount.entity.QueryMonthIncomeExpenseObject;
 import cn.lifecode.recordaccount.entity.bill.YearBillDetail;
 import cn.lifecode.recordaccount.entity.bill.YearBillDetailObject;
 import cn.lifecode.recordaccount.mapper.recordaccount.RecordAccountMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,6 +28,7 @@ import java.util.List;
  * @date 2021-01-27 09:24:28
  */
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class BillServiceImpl implements BillService {
     private static final String EXPENSE = Constant.EXPENSE;
     private static final String INCOME = Constant.INCOME;
@@ -115,6 +122,44 @@ public class BillServiceImpl implements BillService {
             queryBillInfoResponse.setPeriodBillDetailList(recordAccountMapper.queryRecordAccounts(PERIOD, startDate, endDate, startPage, pageSize, userId));
         }
         return Response.success(queryBillInfoResponse);
+    }
+
+    /**
+     * 查询 月支出/月收入 列表
+     *
+     * @param request
+     * @return
+     */
+    @Override
+    public Response<QueryMonthIncomeExpenseListResponse> queryMonthIncomeExpenseList(Request<QueryMonthIncomeExpenseListRequest> request) {
+        QueryMonthIncomeExpenseListRequest body = request.getBody();
+        String queryYearMonthTime = body.getQueryYearMonthTime();
+        Date date = DateUtil.returnDateFromString(queryYearMonthTime, DateUtil.FULL_YEAR_MONTH_PATTERN);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        //1.拼接数据
+        //获取本月的最后一天
+        int lastMonth = calendar.getActualMaximum(Calendar.DATE);
+        List<QueryMonthIncomeExpenseObject> list = new ArrayList<>();
+        QueryMonthIncomeExpenseObject object;
+        for (int i = 1; i <= lastMonth; i++) {
+            object = new QueryMonthIncomeExpenseObject();
+            //放入时间yyyyMMdd
+            String dayStr = i + "";
+            if (i < 10) {
+                dayStr = "0" + i;
+            }
+            String timeStr = queryYearMonthTime + dayStr;
+            object.setTime(timeStr);
+            //查询指定日期的余额
+            double totalMoney = recordAccountMapper.queryTotalMoney(body.getType(), "day", timeStr, body.getUserId());
+            object.setMoney(totalMoney);
+            list.add(object);
+        }
+        //2.填充返回内容
+        QueryMonthIncomeExpenseListResponse response = new QueryMonthIncomeExpenseListResponse();
+        response.setList(list);
+        return Response.success(response);
     }
 
     /**

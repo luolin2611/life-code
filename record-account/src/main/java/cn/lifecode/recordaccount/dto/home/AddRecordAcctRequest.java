@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 添加记账
@@ -45,5 +46,17 @@ public class AddRecordAcctRequest implements Serializable {
      */
     @NotNull(message = "描述信息不能为空")
     private String remark;
-
+    /**
+     * 记账时间-创建创建时间 - 时间格式yyyyMMddHHmmss
+     */
+    @NotNull(message = "记账时间不能为空")
+    private String recordTimeStr;
+    /**
+     * 记账时间-创建创建时间
+     */
+    private Date recordTime;
+    /**
+     * 更新时间
+     */
+    private Date updateTime;
 }

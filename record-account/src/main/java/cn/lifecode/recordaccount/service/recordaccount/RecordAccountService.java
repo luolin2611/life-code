@@ -8,7 +8,6 @@ import cn.lifecode.recordaccount.dto.home.AddRecordAcctRequest;
 import cn.lifecode.recordaccount.dto.home.AddRecordAcctResponse;
 import cn.lifecode.recordaccount.dto.home.HomeInitInfoResponse;
 import cn.lifecode.recordaccount.entity.RecordAccount;
-import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * 记账service

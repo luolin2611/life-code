@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.lifecode.recordaccount.mapper.report.ReportMapper">
+    <resultMap id="reportInfoObject" type="cn.lifecode.recordaccount.entity.QueryReportInfoObject">
+        <result column="classify_id" property="classifyId"/>
+        <result column="classify_name" property="classifyName"/>
+        <result column="icon_name" property="iconName"/>
+        <result column="money" property="money"/>
+        <result column="record_count" property="recordCount"/>
+    </resultMap>
+
+    <select id="queryReportInfo" resultMap="reportInfoObject">
+        SELECT DISTINCT ra_outer.classify_id,
+        ra_outer.classify_name,
+        (
+        SELECT SUM(bill_money)
+        FROM record_account ra_inner
+        WHERE ra_outer.classify_id = ra_inner.classify_id
+        AND ra_inner.user_id = #{userId}
+        <if test="dateType == 'month'">
+            AND date_format(ra_inner.record_time, '%Y%m') = #{startDate}
+        </if>
+        <if test="dateType == 'day'">
+            AND date_format(ra_inner.record_time, '%Y%m%d') = #{startDate}
+        </if>
+        <if test="dateType == 'period'">
+            AND date_format(ra_inner.record_time, '%Y%m%d') &gt;= #{startDate}
+            AND date_format(ra_inner.record_time, '%Y%m%d') &lt;= #{endDate}
+        </if>
+        ) money,
+        (
+        SELECT COUNT(bill_money)
+        FROM record_account ra_inner
+        WHERE ra_outer.classify_id = ra_inner.classify_id
+        AND ra_inner.user_id = #{userId}
+        <if test="dateType == 'month'">
+            AND date_format(ra_inner.record_time, '%Y%m') = #{startDate}
+        </if>
+        <if test="dateType == 'day'">
+            AND date_format(ra_inner.record_time, '%Y%m%d') = #{startDate}
+        </if>
+        <if test="dateType == 'period'">
+            AND date_format(ra_inner.record_time, '%Y%m%d') &gt;= #{startDate}
+            AND date_format(ra_inner.record_time, '%Y%m%d') &lt;= #{endDate}
+        </if>
+        ) record_count,
+        icon.icon_name
+        FROM record_account ra_outer,
+        classify,
+        icon
+        WHERE ra_outer.classify_id = classify.classify_id
+        AND classify.icon_id = icon.icon_id
+        AND ra_outer.classify_type = #{type}
+        AND ra_outer.user_id = #{userId}
+        <if test="dateType == 'month'">
+            AND date_format(ra_outer.record_time, '%Y%m') = #{startDate}
+        </if>
+        <if test="dateType == 'day'">
+            AND date_format(ra_outer.record_time, '%Y%m%d') = #{startDate}
+        </if>
+        <if test="dateType == 'period'">
+            AND date_format(ra_outer.record_time, '%Y%m%d') &gt;= #{startDate}
+            AND date_format(ra_outer.record_time, '%Y%m%d') &lt;= #{endDate}
+        </if>
+        ORDER BY money DESC
+    </select>
+<!--    <select id="queryReportInfo" resultMap="reportInfoObject">-->
+<!--        SELECT DISTINCT ra_outer.classify_id,-->
+<!--        ra_outer.classify_name,-->
+<!--        (-->
+<!--        SELECT SUM(bill_money)-->
+<!--        FROM record_account-->
+<!--        WHERE ra_outer.classify_id = record_account.classify_id-->
+<!--        <if test="dateType == 'month'">-->
+<!--            AND date_format(record_time, '%Y%m') = #{startDate}-->
+<!--        </if>-->
+<!--        <if test="dateType == 'day'">-->
+<!--            AND date_format(record_time, '%Y%m%d') = #{startDate}-->
+<!--        </if>-->
+<!--        <if test="dateType == 'period'">-->
+<!--            AND date_format(record_time, '%Y%m%d') &gt;= #{startDate}-->
+<!--            AND date_format(record_time, '%Y%m%d') &lt;= #{endDate}-->
+<!--        </if>-->
+<!--        ) money,-->
+<!--        (-->
+<!--        SELECT COUNT(bill_money)-->
+<!--        FROM record_account-->
+<!--        WHERE ra_outer.classify_id = record_account.classify_id-->
+<!--        <if test="dateType == 'month'">-->
+<!--            AND date_format(ra_outer.record_time, '%Y%m') = #{startDate}-->
+<!--        </if>-->
+<!--        <if test="dateType == 'day'">-->
+<!--            AND date_format(ra_outer.record_time, '%Y%m%d') = #{startDate}-->
+<!--        </if>-->
+<!--        <if test="dateType == 'period'">-->
+<!--            AND date_format(ra_outer.record_time, '%Y%m%d') &gt;= #{startDate}-->
+<!--            AND date_format(ra_outer.record_time, '%Y%m%d') &lt;= #{endDate}-->
+<!--        </if>-->
+<!--        ) record_count,-->
+<!--        icon.icon_name-->
+<!--        FROM record_account ra_outer,-->
+<!--        classify,-->
+<!--        icon-->
+<!--        WHERE ra_outer.classify_type = #{type }-->
+<!--        AND classify.classify_id = ra_outer.classify_id-->
+<!--        AND icon.icon_id = classify.icon_id-->
+<!--        AND ra_outer.user_id = #{userId}-->
+<!--        <if test="dateType == 'month'">-->
+<!--            AND date_format(ra_outer.record_time, '%Y%m') = #{startDate}-->
+<!--        </if>-->
+<!--        <if test="dateType == 'day'">-->
+<!--            AND date_format(ra_outer.record_time, '%Y%m%d') = #{startDate}-->
+<!--        </if>-->
+<!--        <if test="dateType == 'period'">-->
+<!--            AND date_format(ra_outer.record_time, '%Y%m%d') &gt;= #{startDate}-->
+<!--            AND date_format(ra_outer.record_time, '%Y%m%d') &lt;= #{endDate}-->
+<!--        </if>-->
+<!--        ORDER BY money DESC-->
+<!--    </select>-->
+</mapper>

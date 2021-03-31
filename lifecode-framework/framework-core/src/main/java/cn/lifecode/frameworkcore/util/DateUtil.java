@@ -8,7 +8,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * @author yuanmin
+ * @author rollin
  * 日期时间工具类
  */
 public class DateUtil {
@@ -34,6 +34,10 @@ public class DateUtil {
      * 年月日时分秒 20200101122445
      */
     public static final String FULL_TIME_PATTERN = "yyyyMMddHHmmss";
+    /**
+     * 年月 202103
+     */
+    public static final String FULL_YEAR_MONTH_PATTERN = "yyyyMM";
     /**
      * 年月日时分秒 2020-01-01 12:24:45
      */

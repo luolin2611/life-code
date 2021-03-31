@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 记账
- * 记账的一些操作
+ * 记账的一些操作 -- 初始化使用的 -- 非记账使用
  *
  * @author luolin
  * @date 2021-01-18 09:08:38
@@ -28,7 +28,7 @@ public class RecordAccountController {
     }
 
     /**
-     * 添加记账记录
+     * 添加记账记录 -- 废弃
      *
      * @param request
      * @return
