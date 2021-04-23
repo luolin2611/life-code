@@ -16,38 +16,46 @@
   
 * 3.插件说明
   > 1.plantuml (画图软件)<br/>
-  > &nbsp;&nbsp;&nbsp;&nbsp;指导文件：http://plantuml.com/zh/guide
-  > 
+  > &nbsp;&nbsp;&nbsp;&nbsp;指导文件：http://plantuml.com/zh/guide <br/>
+  > 2.Lombok <br/>
+  > > 1.@Data = getter/setter + toString() + equals() + hashCode() <br/>
+  > > 2.@AllArgsConstructor(access = AccessLevel.PRIVATE)、@NoArgsConstructor <br/>
+  > > 3.@Slf4j (打日志时尽量别用字符串拼接，不够直观且效率低，应该使用{}占位符，用逗号隔开) <br/>
+  > > &nbsp;&nbsp;&nbsp;&nbsp;log.info("请求数据：\r\n{}", FormatUtil.formatJson(sessionStream));
 * 4.证书相关
-  ####4.1 加密策略
+  #### 4.1 加密策略
   > 1.随机生成AES密钥key -- aesKey </br>
   > 2.AES加密明文 -- AES (message) = byte[] </br>
   > 3.RSA公钥加密aesKey -- RSA (aesKey) = byte[] </br>
   > 4.拼接：RSA(aesKey) + AES(message) = byte[] </br>
-  ####4.2 生成证书命令
+  #### 4.2 生成证书命令
   > keytool -genkey -alias RECORD_ACCOUNT -keyalg RSA -keystore record_account.jks -keysize 2048 -sigalg sha256withrsa -validity 36500 -storepass ra123456 -keypass ra123456 -dname "CN=RECORD_ACCOUNT,OU=LifeCode,O=LifeCode,L=GuangDong,ST=ShenZhen,C=ZH"
 
 * 5 项目中遇到的问题
-  ####5.1 请求时间问题
+  #### 5.1 请求时间问题
   > 未指定时区时，默认指定时区非中国时区，导致插入数据时间不对，解决方案，在配置mysql url 地方添加：serverTimezone=Asia/Shanghai <br/>
   > datasource: <br/>
   >&nbsp;&nbsp;driver-class-name: com.mysql.cj.jdbc.Driver #mysql驱动 <br/>
   >&nbsp;&nbsp;url: jdbc:mysql://localhost:3306/record_account?zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai <br/>
   >&nbsp;&nbsp;username: root <br/>
   >&nbsp;&nbsp;password: root123456 <br/>
-  ####5.2 提交Git代码时报错
+  #### 5.2 提交Git代码时报错
   >报错内容：<br/>
   > fatal: unable to access 'https://github.com/luolin2611/life-code/': LibreSSL SSL_connect: SSL_ERROR_SYSCALL in connection to github.com:443<br/>
   > 解决方案：<br/>
   > 找到代理的端口号：
-  > ![img_1.png](img_1.png)<br/>
+  > ![img_1.png](folder/image/img_1.png)<br/>
   > 执行命令：
   > git config --global --add remote.origin.proxy "127.0.0.1:7890"
-  ####5.3 本地打包正常，服务器乱码
+  #### 5.3 本地打包正常，服务器乱码
   >说明：注意你的服务器编码方式，linux系统的服务器编码默认是utf-8，对于是windows的服务器默认不是utf-8。所以在启动的时候需要设置编码方式。<br/>
   >输入命令：$ java -Dfile.encoding=utf-8 -jar xxx.jar
+  #### 5.4 idea 有时提示找不到类或者符号的解决
+  >解决方案：清楚缓存即可
+  > ![img_2.png](folder/image/img_2.png)
+
 * 6 其它
-  ####6.1 生成banner
+  #### 6.1 生成banner
   > 地址： https://www.bootschool.net/ascii
   > 选项:  3d-ascii
   #### 6.2 打包相关
@@ -65,4 +73,7 @@
       return list;
     }
   ```
-        
+  #### 6.4 jdk 1.8新增的方法 （stream()、filter）
+  ```
+    Double sum = obj.getDayRecordAccountObjects().stream().filter(dayRecordAccountObjectFilter -> "0".equals(dayRecordAccountObjectFilter.getClassifyType())).collect(Collectors.summingDouble(DayRecordAccountObject::getBillMoney));
+  ```
