@@ -38,7 +38,7 @@ public class RequestFilter implements Filter {
         BodyReaderHttpServletResponseWrapper wrapperedResponse = new BodyReaderHttpServletResponseWrapper(httpServletResponse);
         filterChain.doFilter(requestWrapper, wrapperedResponse);
         String data = new String(wrapperedResponse.getResponseData());
-        log.info("返回数据：" + "\r\n" + FormatUtil.formatJson(data));
+        log.info("返回数据：\r\n{}", FormatUtil.formatJson(data));
         ServletOutputStream out = servletResponse.getOutputStream();
         out.write(data.getBytes(StandardCharsets.UTF_8));
         out.flush();

@@ -28,7 +28,7 @@ public class BodyReaderHttpServletRequestWrapper extends HttpServletRequestWrapp
     public BodyReaderHttpServletRequestWrapper(HttpServletRequest request) throws IOException {
         super(request);
         String sessionStream = getBodyString(request);
-        log.info("请求数据：" + "\r\n" + FormatUtil.formatJson(sessionStream));
+        log.info("请求数据：\r\n{}", FormatUtil.formatJson(sessionStream));
         //需要加密的接口
         if (getRequestURI().contains(DECODE_API)) {
             JSONObject messageJson = new JSONObject();

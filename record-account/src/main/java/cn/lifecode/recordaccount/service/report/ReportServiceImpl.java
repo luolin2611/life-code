@@ -46,38 +46,45 @@ public class ReportServiceImpl implements ReportService {
         QueryReportInfoResponse response = new QueryReportInfoResponse();
         List<QueryReportInfoObject> objects;
         String reportType = body.getReportType();
+        //开始时间
+        String startDate = "";
+        //请求类型
+        String dateType = "";
         //年报表
         if (REPORT_TYPE_YEAR.equals(reportType)) {
-
+            startDate = body.getYear();
+            dateType = "year";
         }
         //月报表
         if (REPORT_TYPE_MONTH.equals(reportType)) {
-            double expense = recordAccountMapper.queryTotalMoney("0", "month", body.getMonth(), body.getUserId());
-            double income = recordAccountMapper.queryTotalMoney("1", "month", body.getMonth(), body.getUserId());
-            response.setExpense(expense);
-            response.setIncome(income);
-            List<QueryReportInfoObject> objectList = reportMapper.queryReportInfo("month", body.getMonth(), "", body.getUserId(), body.getType());
-            if (!objectList.isEmpty()) {
-                int sum = 0;
-                QueryReportInfoObject object;
-                objects = new ArrayList<>();
-                //计算总和
-                for (int i = 0; i < objectList.size(); i++) {
-                    object = objectList.get(i);
-                    sum += object.getMoney();
-                }
-                //放置百分比
-                for(int i=0; i<objectList.size(); i++) {
-                    object = objectList.get(i);
-                    object.setProportion(object.getMoney()/sum);
-                    objects.add(object);
-                }
-                response.setReportInfoList(objects);
-            }
+            startDate = body.getMonth();
+            dateType = "month";
         }
         //自定义 - 时间段报表
         if (REPORT_TYPE_PERIOD.equals(reportType)) {
 
+        }
+        double expense = recordAccountMapper.queryTotalMoney("0", dateType, startDate, body.getUserId());
+        double income = recordAccountMapper.queryTotalMoney("1", dateType, startDate, body.getUserId());
+        response.setExpense(expense);
+        response.setIncome(income);
+        List<QueryReportInfoObject> objectList = reportMapper.queryReportInfo(dateType, startDate, "", body.getUserId(), body.getType());
+        if (!objectList.isEmpty()) {
+            int sum = 0;
+            QueryReportInfoObject object;
+            objects = new ArrayList<>();
+            //计算总和
+            for (int i = 0; i < objectList.size(); i++) {
+                object = objectList.get(i);
+                sum += object.getMoney();
+            }
+            //放置百分比
+            for(int i=0; i<objectList.size(); i++) {
+                object = objectList.get(i);
+                object.setProportion(object.getMoney()/sum);
+                objects.add(object);
+            }
+            response.setReportInfoList(objects);
         }
 
 

@@ -1,7 +1,6 @@
 package cn.lifecode.recordaccount.entity;
 
 import lombok.Data;
-
 import java.io.Serializable;
 import java.util.Date;
 
@@ -35,7 +34,7 @@ public class DayRecordAccountObject implements Serializable {
     /**
      * 账单金额
      */
-    private String billMoney;
+    private Double billMoney;
     /**
      * 图标对应图标
      */

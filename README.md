@@ -77,3 +77,7 @@
   ```
     Double sum = obj.getDayRecordAccountObjects().stream().filter(dayRecordAccountObjectFilter -> "0".equals(dayRecordAccountObjectFilter.getClassifyType())).collect(Collectors.summingDouble(DayRecordAccountObject::getBillMoney));
   ```
+  #### 6.5 遍历list之后将list中对象根据某个元素重新组合
+  ```
+    参考BillServiceImpl.class --> processDayRecordAccountList()
+  ```

@@ -16,9 +16,9 @@ eureka:
 
 
 # 添加ribbon的超时时间设置
-ribbon:
-  ReadTimeout: 3000
-  ConnectTimeout: 3000
+#ribbon:
+#  ReadTimeout: 3000
+#  ConnectTimeout: 3000
 
 
 # Zuul配置
@@ -40,10 +40,10 @@ zuul:
       path: /record-account/**
       serviceId: eureka-client-record-account
 
-hystrix:
-  command:
-    default:
-      execution:
-        isolation:
-          thread:
-            timeout-in-milliseconds: 3000
+#hystrix:
+#  command:
+#    default:
+#      execution:
+#        isolation:
+#          thread:
+#            timeout-in-milliseconds: 3000

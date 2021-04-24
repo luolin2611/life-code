@@ -18,11 +18,11 @@
         FROM record_account ra_inner
         WHERE ra_outer.classify_id = ra_inner.classify_id
         AND ra_inner.user_id = #{userId}
+        <if test="dateType == 'year'">
+            AND date_format(ra_inner.record_time, '%Y') = #{startDate}
+        </if>
         <if test="dateType == 'month'">
             AND date_format(ra_inner.record_time, '%Y%m') = #{startDate}
-        </if>
-        <if test="dateType == 'day'">
-            AND date_format(ra_inner.record_time, '%Y%m%d') = #{startDate}
         </if>
         <if test="dateType == 'period'">
             AND date_format(ra_inner.record_time, '%Y%m%d') &gt;= #{startDate}
@@ -34,11 +34,11 @@
         FROM record_account ra_inner
         WHERE ra_outer.classify_id = ra_inner.classify_id
         AND ra_inner.user_id = #{userId}
+        <if test="dateType == 'year'">
+            AND date_format(ra_inner.record_time, '%Y') = #{startDate}
+        </if>
         <if test="dateType == 'month'">
             AND date_format(ra_inner.record_time, '%Y%m') = #{startDate}
-        </if>
-        <if test="dateType == 'day'">
-            AND date_format(ra_inner.record_time, '%Y%m%d') = #{startDate}
         </if>
         <if test="dateType == 'period'">
             AND date_format(ra_inner.record_time, '%Y%m%d') &gt;= #{startDate}
@@ -53,11 +53,11 @@
         AND classify.icon_id = icon.icon_id
         AND ra_outer.classify_type = #{type}
         AND ra_outer.user_id = #{userId}
+        <if test="dateType == 'year'">
+            AND date_format(ra_outer.record_time, '%Y') = #{startDate}
+        </if>
         <if test="dateType == 'month'">
             AND date_format(ra_outer.record_time, '%Y%m') = #{startDate}
-        </if>
-        <if test="dateType == 'day'">
-            AND date_format(ra_outer.record_time, '%Y%m%d') = #{startDate}
         </if>
         <if test="dateType == 'period'">
             AND date_format(ra_outer.record_time, '%Y%m%d') &gt;= #{startDate}
@@ -70,47 +70,49 @@
 <!--        ra_outer.classify_name,-->
 <!--        (-->
 <!--        SELECT SUM(bill_money)-->
-<!--        FROM record_account-->
-<!--        WHERE ra_outer.classify_id = record_account.classify_id-->
-<!--        <if test="dateType == 'month'">-->
-<!--            AND date_format(record_time, '%Y%m') = #{startDate}-->
+<!--        FROM record_account ra_inner-->
+<!--        WHERE ra_outer.classify_id = ra_inner.classify_id-->
+<!--        AND ra_inner.user_id = #{userId}-->
+<!--        <if test="dateType == 'year'">-->
+<!--            AND date_format(ra_inner.record_time, '%Y') = #{startDate}-->
 <!--        </if>-->
-<!--        <if test="dateType == 'day'">-->
-<!--            AND date_format(record_time, '%Y%m%d') = #{startDate}-->
+<!--        <if test="dateType == 'month'">-->
+<!--            AND date_format(ra_inner.record_time, '%Y%m') = #{startDate}-->
 <!--        </if>-->
 <!--        <if test="dateType == 'period'">-->
-<!--            AND date_format(record_time, '%Y%m%d') &gt;= #{startDate}-->
-<!--            AND date_format(record_time, '%Y%m%d') &lt;= #{endDate}-->
+<!--            AND date_format(ra_inner.record_time, '%Y%m%d') &gt;= #{startDate}-->
+<!--            AND date_format(ra_inner.record_time, '%Y%m%d') &lt;= #{endDate}-->
 <!--        </if>-->
 <!--        ) money,-->
 <!--        (-->
 <!--        SELECT COUNT(bill_money)-->
-<!--        FROM record_account-->
-<!--        WHERE ra_outer.classify_id = record_account.classify_id-->
-<!--        <if test="dateType == 'month'">-->
-<!--            AND date_format(ra_outer.record_time, '%Y%m') = #{startDate}-->
+<!--        FROM record_account ra_inner-->
+<!--        WHERE ra_outer.classify_id = ra_inner.classify_id-->
+<!--        AND ra_inner.user_id = #{userId}-->
+<!--        <if test="dateType == 'year'">-->
+<!--            AND date_format(ra_inner.record_time, '%Y') = #{startDate}-->
 <!--        </if>-->
-<!--        <if test="dateType == 'day'">-->
-<!--            AND date_format(ra_outer.record_time, '%Y%m%d') = #{startDate}-->
+<!--        <if test="dateType == 'month'">-->
+<!--            AND date_format(ra_inner.record_time, '%Y%m') = #{startDate}-->
 <!--        </if>-->
 <!--        <if test="dateType == 'period'">-->
-<!--            AND date_format(ra_outer.record_time, '%Y%m%d') &gt;= #{startDate}-->
-<!--            AND date_format(ra_outer.record_time, '%Y%m%d') &lt;= #{endDate}-->
+<!--            AND date_format(ra_inner.record_time, '%Y%m%d') &gt;= #{startDate}-->
+<!--            AND date_format(ra_inner.record_time, '%Y%m%d') &lt;= #{endDate}-->
 <!--        </if>-->
 <!--        ) record_count,-->
 <!--        icon.icon_name-->
 <!--        FROM record_account ra_outer,-->
 <!--        classify,-->
 <!--        icon-->
-<!--        WHERE ra_outer.classify_type = #{type }-->
-<!--        AND classify.classify_id = ra_outer.classify_id-->
-<!--        AND icon.icon_id = classify.icon_id-->
+<!--        WHERE ra_outer.classify_id = classify.classify_id-->
+<!--        AND classify.icon_id = icon.icon_id-->
+<!--        AND ra_outer.classify_type = #{type}-->
 <!--        AND ra_outer.user_id = #{userId}-->
+<!--        <if test="dateType == 'year'">-->
+<!--            AND date_format(ra_outer.record_time, '%Y') = #{startDate}-->
+<!--        </if>-->
 <!--        <if test="dateType == 'month'">-->
 <!--            AND date_format(ra_outer.record_time, '%Y%m') = #{startDate}-->
-<!--        </if>-->
-<!--        <if test="dateType == 'day'">-->
-<!--            AND date_format(ra_outer.record_time, '%Y%m%d') = #{startDate}-->
 <!--        </if>-->
 <!--        <if test="dateType == 'period'">-->
 <!--            AND date_format(ra_outer.record_time, '%Y%m%d') &gt;= #{startDate}-->

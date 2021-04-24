@@ -18,10 +18,15 @@
     <dependencies>
         <!--内部依赖框架 -->
         <dependency>
-            <groupId>cn.lifecode.framewordcore</groupId>
-            <artifactId>frameword-core</artifactId>
+            <groupId>cn.lifecode.mavenweb</groupId>
+            <artifactId>maven-web</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>cn.lifecode.framewordcore</groupId>-->
+<!--            <artifactId>frameword-core</artifactId>-->
+<!--            <version>1.0-SNAPSHOT</version>-->
+<!--        </dependency>-->
 
         <!-- 添加 zuul -->
         <dependency>
