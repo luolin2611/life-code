@@ -192,7 +192,7 @@ public class BillServiceImpl implements BillService {
         //存放当天的集合
         List<DayRecordAccountObject> dayRecordAccountObjects = null;
         // 2.封装数据
-        for (int i = 0; i < dayRecordAccountObjectList.size(); i++) {
+        for (int i = 0, size = dayRecordAccountObjectList.size(); i < size; i++) {
             object = dayRecordAccountObjectList.get(i);
             calendar.setTime(object.getRecordTime());
             String dateStr = sdf.format(object.getRecordTime()) + " " + weekDays[calendar.get(Calendar.DAY_OF_WEEK) - 1];

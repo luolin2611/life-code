@@ -2,6 +2,10 @@ package cn.lifecode.recordaccount.controller;
 
 import cn.lifecode.frameworkcore.bean.Request;
 import cn.lifecode.frameworkcore.bean.Response;
+import cn.lifecode.recordaccount.dto.bill.QueryBillInfoRequest;
+import cn.lifecode.recordaccount.dto.bill.QueryBillInfoResponse;
+import cn.lifecode.recordaccount.dto.report.QueryReportDetailsListRequest;
+import cn.lifecode.recordaccount.dto.report.QueryReportDetailsListResponse;
 import cn.lifecode.recordaccount.dto.report.QueryReportInfoRequest;
 import cn.lifecode.recordaccount.dto.report.QueryReportInfoResponse;
 import cn.lifecode.recordaccount.service.report.ReportService;
@@ -34,5 +38,16 @@ public class ReportController {
     @PostMapping("/queryReportInfo")
     public Response<QueryReportInfoResponse> queryReportInfo(@RequestBody Request<QueryReportInfoRequest> request) {
         return reportService.queryReportInfo(request);
+    }
+
+    /**
+     * 请求详情列表
+     *
+     * @param request
+     * @return
+     */
+    @PostMapping("/queryReportDetailsList")
+    public Response<QueryReportDetailsListResponse> queryReportDetailsList(@RequestBody Request<QueryReportDetailsListRequest> request) {
+        return reportService.queryReportDetailsList(request);
     }
 }

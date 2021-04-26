@@ -73,7 +73,7 @@
       return list;
     }
   ```
-  #### 6.4 jdk 1.8新增的方法 （stream()、filter）
+  #### 6.4 jdk 1.8 新增 Java Lambda 表达式 （List 可以使用 stream()、filter 对内容进行操作）
   ```
     Double sum = obj.getDayRecordAccountObjects().stream().filter(dayRecordAccountObjectFilter -> "0".equals(dayRecordAccountObjectFilter.getClassifyType())).collect(Collectors.summingDouble(DayRecordAccountObject::getBillMoney));
   ```
@@ -81,3 +81,10 @@
   ```
     参考BillServiceImpl.class --> processDayRecordAccountList()
   ```
+  #### 6.6 遍历List时，使用 i < list.size() 这样会增加每次每次都去计算list.size() 解决方案如下。
+  ```
+  for (int i = 0, size = dayRecordAccountObjectList.size(); i < size; i++) {
+  
+  }
+  ```
+

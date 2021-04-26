@@ -107,7 +107,7 @@
         </if>
         order by ra.record_time desc
         <if test="pageSize != 0">
-            <!-- 不需要分页 -->
+            <!-- 需要分页 -->
             limit #{startPage}, #{pageSize};
         </if>
     </select>

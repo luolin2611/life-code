@@ -10,6 +10,22 @@
         <result column="record_count" property="recordCount"/>
     </resultMap>
 
+    <!-- DayRecordAccountObject -->
+    <resultMap id="recordAccountObject" type="cn.lifecode.recordaccount.entity.DayRecordAccountObject">
+        <result column="record_account_id" property="recordAccountId"/>
+        <result column="classify_id" property="classifyId"/>
+        <result column="classify_type" property="classifyType"/>
+        <result column="classify_name" property="classifyName"/>
+        <result column="remark" property="remark"/>
+        <result column="bill_money" property="billMoney"/>
+        <result column="record_time" property="recordTime"/>
+        <!-- 一对一 -->
+        <association property="icon" javaType="cn.lifecode.recordaccount.entity.Icon">
+            <result column="icon_id" property="iconId"/>
+            <result column="icon_name" property="iconName"/>
+        </association>
+    </resultMap>
+
     <select id="queryReportInfo" resultMap="reportInfoObject">
         SELECT DISTINCT ra_outer.classify_id,
         ra_outer.classify_name,
@@ -65,6 +81,7 @@
         </if>
         ORDER BY money DESC
     </select>
+
 <!--    <select id="queryReportInfo" resultMap="reportInfoObject">-->
 <!--        SELECT DISTINCT ra_outer.classify_id,-->
 <!--        ra_outer.classify_name,-->
@@ -120,4 +137,52 @@
 <!--        </if>-->
 <!--        ORDER BY money DESC-->
 <!--    </select>-->
+
+
+
+    <!-- 查询(指定日期的返回日期对象) -->
+    <select id="queryRecordAccountObject" resultMap="recordAccountObject">
+        SELECT
+        ra.record_account_id,
+        ra.classify_id,
+        ra.classify_name,
+        ra.classify_type,
+        ra.remark,
+        ra.bill_money,
+        icon.icon_name,
+        icon.icon_id,
+        ra.record_time
+        FROM record_account ra, icon, classify cl
+        WHERE icon.icon_id = cl.icon_id
+        AND cl.classify_id = ra.classify_id
+        AND ra.user_id = #{userId}
+        <if test="dateType == 'month'">
+            AND date_format(ra.record_time, '%Y%m') = #{startDate}
+        </if>
+        <if test="dateType == 'day'">
+            AND date_format(ra.record_time, '%Y%m%d') = #{startDate}
+        </if>
+        <if test="dateType == 'period'">
+            AND date_format(ra.record_time, '%Y%m%d') &gt;= #{startDate}
+            AND date_format(ra.record_time , '%Y%m%d') &lt;= #{endDate}
+        </if>
+        <if test="classifyId != null">
+            AND ra.classify_id = #{classifyId}
+        </if>
+        <choose>
+            <when test="orderByType == 'money'">
+                order by ra.bill_money desc
+            </when>
+            <when test="orderByType == 'time'">
+                order by ra.record_time desc
+            </when>
+            <otherwise>
+                order by ra.record_time desc
+            </otherwise>
+        </choose>
+        <if test="pageSize != 0">
+            <!-- 需要分页 -->
+            limit #{startPage}, #{pageSize};
+        </if>
+    </select>
 </mapper>
