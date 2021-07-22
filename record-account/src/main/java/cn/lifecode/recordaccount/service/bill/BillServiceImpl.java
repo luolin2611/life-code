@@ -117,6 +117,7 @@ public class BillServiceImpl implements BillService {
             //封装返回内容
             queryBillInfoResponse.setIncome(monthIncome);
             queryBillInfoResponse.setExpense(monthExpense);
+            queryBillInfoResponse.setTotal(dayRecordAccountObjectList.size());
             queryBillInfoResponse.setMonthBillDetailList(newRecordAccountsList);
         }
         // 3.时间段

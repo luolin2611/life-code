@@ -36,7 +36,7 @@ public class BillController {
      * @param request
      * @return
      */
-    @PostMapping("/queryBillInfo")
+    @PostMapping("/queryBillInfo") 
     public Response<QueryBillInfoResponse> queryBillInfo(@RequestBody Request<QueryBillInfoRequest> request) {
         return billService.queryBillInfo(request);
     }
