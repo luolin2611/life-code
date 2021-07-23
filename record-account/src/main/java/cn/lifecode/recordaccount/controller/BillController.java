@@ -2,11 +2,9 @@ package cn.lifecode.recordaccount.controller;
 
 import cn.lifecode.frameworkcore.bean.Request;
 import cn.lifecode.frameworkcore.bean.Response;
-import cn.lifecode.recordaccount.dto.bill.QueryBillInfoRequest;
-import cn.lifecode.recordaccount.dto.bill.QueryBillInfoResponse;
-import cn.lifecode.recordaccount.dto.bill.QueryMonthIncomeExpenseListRequest;
-import cn.lifecode.recordaccount.dto.bill.QueryMonthIncomeExpenseListResponse;
+import cn.lifecode.recordaccount.dto.bill.*;
 import cn.lifecode.recordaccount.service.bill.BillService;
+import org.bouncycastle.cert.ocsp.Req;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,7 +34,7 @@ public class BillController {
      * @param request
      * @return
      */
-    @PostMapping("/queryBillInfo") 
+    @PostMapping("/queryBillInfo")
     public Response<QueryBillInfoResponse> queryBillInfo(@RequestBody Request<QueryBillInfoRequest> request) {
         return billService.queryBillInfo(request);
     }
@@ -44,10 +42,21 @@ public class BillController {
     /**
      * 查询 月支出/月收入 列表
      *
-     * @return
+     * @return 柱状图所需要数据列表
      */
     @PostMapping("/queryMonthIncomeExpenseList")
-    public Response<QueryMonthIncomeExpenseListResponse> queryMonthIncomeExpenseList(@RequestBody Request<QueryMonthIncomeExpenseListRequest> request){
+    public Response<QueryMonthIncomeExpenseListResponse> queryMonthIncomeExpenseList(@RequestBody Request<QueryMonthIncomeExpenseListRequest> request) {
         return billService.queryMonthIncomeExpenseList(request);
+    }
+
+    /**
+     * 查询年账单折线图数据
+     *
+     * @param request 请求参数
+     * @return 每月的收入和支出list
+     */
+    @PostMapping("/queryYearBrokeLineList")
+    public Response<QueryYearBrokeLineListResponse> queryYearBrokeLineList(@RequestBody Request<QueryYearBrokeLineListRequest> request) {
+        return billService.queryYearBrokeLineList(request);
     }
 }

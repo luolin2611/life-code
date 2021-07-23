@@ -146,6 +146,14 @@
         limit #{startPage}, #{pageSize};
     </select>
 
+    <select id="queryYearBrokeLineIncomeOrExpenseList" resultType="string" parameterType="string">
+        SELECT SUM(bill_money)
+        FROM record_account
+        WHERE classify_type = #{billType} AND YEAR (update_time) = #{year}
+        GROUP BY MONTH (update_time)
+        ORDER BY MONTH (update_time) DESC
+    </select>
+
     <!-- 记账 -->
     <insert id="addRecordAcct" parameterType="cn.lifecode.recordaccount.dto.home.AddRecordAcctRequest"
             keyProperty="record_account_id"

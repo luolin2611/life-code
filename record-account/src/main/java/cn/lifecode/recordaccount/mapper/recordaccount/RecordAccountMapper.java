@@ -81,4 +81,12 @@ public interface RecordAccountMapper {
      */
     void addRecordAcct(@Param("addRecordAcctRequest") AddRecordAcctRequest addRecordAcctRequest);
 
+    /**
+     * 查询 收入每月list
+     *
+     * @param billType 账单类型： 0 - 收入，1-支出
+     * @param year     年
+     * @return list
+     */
+    List<String> queryYearBrokeLineIncomeOrExpenseList(@Param("billType") String billType, @Param("year") String year);
 }

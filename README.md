@@ -15,6 +15,8 @@
 > 
 > 3.framework-core --> 公共类 
 
+
+
 ### 2.插件说明
 
 > 1.plantuml (画图软件)<br/>
@@ -25,26 +27,28 @@
 > > 3.@Slf4j (打日志时尽量别用字符串拼接，不够直观且效率低，应该使用{}占位符，用逗号隔开) <br/>
 > > &nbsp;&nbsp;&nbsp;&nbsp;log.info("请求数据：\r\n{}", FormatUtil.formatJson(sessionStream));
 
+
+
 ### 3.证书相关
 
-#### 4.1 加密策略
+#### 1.加密策略
 > 1.随机生成AES密钥key -- aesKey </br>
 > 2.AES加密明文 -- AES (message) = byte[] </br>
 > 3.RSA公钥加密aesKey -- RSA (aesKey) = byte[] </br>
 > 4.拼接：RSA(aesKey) + AES(message) = byte[] </br>
-#### 4.2 生成证书命令
+#### 2.生成证书命令
 > keytool -genkey -alias RECORD_ACCOUNT -keyalg RSA -keystore record_account.jks -keysize 2048 -sigalg sha256withrsa -validity 36500 -storepass ra123456 -keypass ra123456 -dname "CN=RECORD_ACCOUNT,OU=LifeCode,O=LifeCode,L=GuangDong,ST=ShenZhen,C=ZH"
 
-### 5 项目中遇到的问题
+### 4 项目中遇到的问题
 
-#### 5.1 请求时间问题
+#### 1.请求时间问题
 > 未指定时区时，默认指定时区非中国时区，导致插入数据时间不对，解决方案，在配置mysql url 地方添加：serverTimezone=Asia/Shanghai <br/>
 > datasource: <br/>
 >&nbsp;&nbsp;driver-class-name: com.mysql.cj.jdbc.Driver #mysql驱动 <br/>
 >&nbsp;&nbsp;url: jdbc:mysql://localhost:3306/record_account?zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai <br/>
 >&nbsp;&nbsp;username: root <br/>
 >&nbsp;&nbsp;password: root123456 <br/>
-#### 5.2 提交Git代码时报错
+#### 2.提交Git代码时报错
 >报错内容：<br/>
 > fatal: unable to access 'https://github.com/luolin2611/life-code/': LibreSSL SSL_connect: SSL_ERROR_SYSCALL in connection to github.com:443<br/>
 > 解决方案：<br/>
@@ -52,21 +56,23 @@
 > ![img_1.png](folder/image/img_1.png)<br/>
 > 执行命令：
 > git config --global --add remote.origin.proxy "127.0.0.1:7890"
-#### 5.3 本地打包正常，服务器乱码
+#### 3.本地打包正常，服务器乱码
 >说明：注意你的服务器编码方式，linux系统的服务器编码默认是utf-8，对于是windows的服务器默认不是utf-8。所以在启动的时候需要设置编码方式。<br/>
 >输入命令：$ java -Dfile.encoding=utf-8 -jar xxx.jar
-#### 5.4 idea 有时提示找不到类或者符号的解决
+#### 4.idea 有时提示找不到类或者符号的解决
 >解决方案：清楚缓存即可
 > ![img_2.png](folder/image/img_2.png)
 
-### 6.其它
 
-#### 6.1 生成banner
+
+### 5.其它
+
+#### 1.生成banner
 > 地址： https://www.bootschool.net/ascii
 > 选项:  3d-ascii
-#### 6.2 打包相关
+#### 2.打包相关
 > mvn clean package -P sit1
-#### 6.3 soar举例
+#### 3.soar举例
 ```
   if (dayRecordAccountObjectList.size() <= 0) {
     return list;
@@ -78,24 +84,24 @@
     return list;
   }
 ```
-#### 6.4 jdk 1.8 新增 Java Lambda 表达式 （List 可以使用 stream()、filter 对内容进行操作）
+#### 4.jdk 1.8 新增 Java Lambda 表达式 （List 可以使用 stream()、filter 对内容进行操作）
 ```
   Double sum = obj.getDayRecordAccountObjects().stream().filter(dayRecordAccountObjectFilter -> "0".equals(dayRecordAccountObjectFilter.getClassifyType())).collect(Collectors.summingDouble(DayRecordAccountObject::getBillMoney));
 ```
-#### 6.5 遍历list之后将list中对象根据某个元素重新组合
+#### 5.遍历list之后将list中对象根据某个元素重新组合
 ```
   参考BillServiceImpl.class --> processDayRecordAccountList()
 ```
-#### 6.6 遍历List时，使用 i < list.size() 这样会增加每次每次都去计算list.size() 解决方案如下。
+#### 6.遍历List时，使用 i < list.size() 这样会增加每次每次都去计算list.size() 解决方案如下。
 ```
 for (int i = 0, size = dayRecordAccountObjectList.size(); i < size; i++) {
 
 }
 ```
 
-#### 6.7 使用StringUtils 以及 CollectionUtils
+#### 7.使用StringUtils 以及 CollectionUtils
 
-##### 6.7.1 分别导入maven依赖
+##### 1.分别导入maven依赖
 
 ```xml
 <dependency>
@@ -111,11 +117,27 @@ for (int i = 0, size = dayRecordAccountObjectList.size(); i < size; i++) {
 </dependency>
 ```
 
-##### 6.7.2 常用语法
+##### 2.常用语法
 
 ###### 1.StringUtils.isEmpty();
 
 ###### 2.CollectionUtils.isEmpty();
+
+
+
+### 6.SQL 技术沉淀
+
+#### 1.使用分组group by (有‘每’字就可以考虑分组)
+
+##### 1.1 例如：查询某年每月的数据
+
+```sql
+SELECT SUM(bill_money) , MONTH(update_time) FROM record_account WHERE classify_type = '0' AND YEAR(update_time) = '2021' GROUP BY MONTH(update_time) ORDER BY MONTH(update_time) DESC
+```
+
+##### 1.2 sql 执行书序：温(when)哥(group by)华(having)白(group by)领(limit)
+
+
 
 ### 7.开发工具的使用
 
@@ -128,6 +150,8 @@ for (int i = 0, size = dayRecordAccountObjectList.size(); i < size; i++) {
 ​	在IDEA界面依次点击File- ->Settings- ->Keymap,在输入框中输入introduce variable
 
 ![image-20210720074548464](folder/image/image-20210720074548464.png)
+
+
 
 ### 8.Mac操作习惯
 

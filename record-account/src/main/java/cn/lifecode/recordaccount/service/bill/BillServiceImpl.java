@@ -4,10 +4,7 @@ import cn.lifecode.frameworkcore.bean.Request;
 import cn.lifecode.frameworkcore.bean.Response;
 import cn.lifecode.frameworkcore.util.DateUtil;
 import cn.lifecode.recordaccount.common.constant.Constant;
-import cn.lifecode.recordaccount.dto.bill.QueryBillInfoRequest;
-import cn.lifecode.recordaccount.dto.bill.QueryBillInfoResponse;
-import cn.lifecode.recordaccount.dto.bill.QueryMonthIncomeExpenseListRequest;
-import cn.lifecode.recordaccount.dto.bill.QueryMonthIncomeExpenseListResponse;
+import cn.lifecode.recordaccount.dto.bill.*;
 import cn.lifecode.recordaccount.entity.DayRecordAccount;
 import cn.lifecode.recordaccount.entity.DayRecordAccountObject;
 import cn.lifecode.recordaccount.entity.QueryMonthIncomeExpenseObject;
@@ -68,6 +65,8 @@ public class BillServiceImpl implements BillService {
             int month = 12;
             double expense = 0;
             double income = 0;
+            double totalSurplus = 0;
+            double surplus = 0;
             while (month > 0) {
                 //eg: 202112
                 time = year + (month < 10 ? ("0" + month) : month);
@@ -75,12 +74,14 @@ public class BillServiceImpl implements BillService {
                 expense = recordAccountMapper.queryTotalMoney(EXPENSE, MONTH, time, userId);
                 if (income != 0 || expense != 0) {
                     //有月支出或月收入 才计入
+                    surplus = income - expense;
+                    totalSurplus += surplus;
                     yearBillDetailObject = new YearBillDetailObject();
                     yearBillDetailObject.setYear(year + "年");
                     yearBillDetailObject.setMonth(month + "月");
                     yearBillDetailObject.setExpense(expense);
                     yearBillDetailObject.setIncome(income);
-                    yearBillDetailObject.setSurplus(income - expense);
+                    yearBillDetailObject.setSurplus(surplus);
                     yearBillDetailObjectList.add(yearBillDetailObject);
                 }
                 month--;
@@ -94,6 +95,7 @@ public class BillServiceImpl implements BillService {
             queryBillInfoResponse.setIncome(yearIncome);
             queryBillInfoResponse.setExpense(yearExpense);
             queryBillInfoResponse.setYearBillDetail(yearBillDetail);
+            yearBillDetail.setTotalSurplus(totalSurplus);
         }
         //2.月
         //前端传入参数： eg: 202101
@@ -167,6 +169,23 @@ public class BillServiceImpl implements BillService {
         QueryMonthIncomeExpenseListResponse response = new QueryMonthIncomeExpenseListResponse();
         response.setList(list);
         return Response.success(response);
+    }
+
+    /**
+     * 查询年账单折线图数据
+     *
+     * @param request 请求参数
+     * @return 每月的收入和支出list
+     */
+    @Override
+    public Response<QueryYearBrokeLineListResponse> queryYearBrokeLineList(Request<QueryYearBrokeLineListRequest> request) {
+        String year = request.getBody().getYear();
+        List<String> incomeList = recordAccountMapper.queryYearBrokeLineIncomeOrExpenseList("1", year);
+        List<String> expenseList = recordAccountMapper.queryYearBrokeLineIncomeOrExpenseList("0", year);
+        QueryYearBrokeLineListResponse object = new QueryYearBrokeLineListResponse();
+        object.setIncomeList(incomeList);
+        object.setExpenseList(expenseList);
+        return Response.success(object);
     }
 
     /**
