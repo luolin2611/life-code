@@ -269,7 +269,7 @@ SELECT SUM(bill_money) , MONTH(update_time) FROM record_account WHERE classify_t
 
 如下图所示是“计算长方形和圆形的周长与面积”的类图，图形接口有计算面积和周长的抽象方法，长方形和圆形实现这两个方法供访问类调用。
 
-![image-20210905155848707](/Volumes/FILE_WORK/work/Code/SpringBoot/life-code/folder/image/image-20210905155848707.png)
+![image-20210905155848707](folder/image/image-20210905155848707.png)
 
 <div style="width: 100%; text-align: center; font-size: 1rem">“计算长方形和圆形的周长与面积”的类图<font></font></div>
 
@@ -285,7 +285,7 @@ SELECT SUM(bill_money) , MONTH(update_time) FROM record_account WHERE classify_t
 
 在 UML 类图中，依赖关系使用带箭头的虚线来表示，箭头从使用类指向被依赖的类。如图所示是人与手机的关系图，人通过手机的语音传送方法打电话。
 
-![image-20210905201441155](/Volumes/FILE_WORK/work/Code/SpringBoot/life-code/folder/image/image-20210905201441155.png)
+![image-20210905201441155](folder/image/image-20210905201441155.png)
 
 #### 2.关联关系
 
@@ -297,7 +297,7 @@ SELECT SUM(bill_money) , MONTH(update_time) FROM record_account WHERE classify_t
 
 如图所示是老师和学生的关系图，每个老师可以教多个学生，每个学生也可向多个老师学，他们是双向关联。
 
-![image-20210905202205427](/Volumes/FILE_WORK/work/Code/SpringBoot/life-code/folder/image/image-20210905202205427.png)
+![image-20210905202205427](folder/image/image-20210905202205427.png)
 
 #### 3.聚合关系
 
@@ -311,7 +311,7 @@ SELECT SUM(bill_money) , MONTH(update_time) FROM record_account WHERE classify_t
 
 如图所示是大学和教师的关系图。
 
-![image-20210905202631326](/Volumes/FILE_WORK/work/Code/SpringBoot/life-code/folder/image/image-20210905202631326.png)
+![image-20210905202631326](folder/image/image-20210905202631326.png)
 
 #### 4.组合关系
 
@@ -323,7 +323,7 @@ SELECT SUM(bill_money) , MONTH(update_time) FROM record_account WHERE classify_t
 
 在 UML 类图中，组合关系用带实心菱形的实线来表示，菱形指向整体。如图所示是头和嘴的关系图。
 
-![image-20210905202952854](/Volumes/FILE_WORK/work/Code/SpringBoot/life-code/folder/image/image-20210905202952854.png)
+![image-20210905202952854](folder/image/image-20210905202952854.png)
 
 #### 5.泛化关系
 
@@ -333,7 +333,7 @@ SELECT SUM(bill_money) , MONTH(update_time) FROM record_account WHERE classify_t
 
 Person 类的子类，其类图如图所示。
 
-![image-20210905203528955](/Volumes/FILE_WORK/work/Code/SpringBoot/life-code/folder/image/image-20210905203528955.png)
+![image-20210905203528955](folder/image/image-20210905203528955.png)
 
 #### 6.实现关系
 
@@ -341,7 +341,7 @@ Person 类的子类，其类图如图所示。
 
 **在** **UML** **类图中，实现关系使用带空心三角箭头的虚线来表示，箭头从实现类指向接口。**例如，汽车和船实现了交通工具，其类图如图所示。
 
-![image-20210905204017206](/Volumes/FILE_WORK/work/Code/SpringBoot/life-code/folder/image/image-20210905204017206.png)
+![image-20210905204017206](folder/image/image-20210905204017206.png)
 
 ### 面向对象设计原则
 
@@ -390,6 +390,10 @@ Person 类的子类，其类图如图所示。
 | 接口隔高原则 (Interface Segregation Principle, ISP) |            使用多个专门的接口来取代一个统一的接口            | ★★☆☆☆  |
 |     合成复用原则 (Comotite euse Principle,CRP)      | 在系统中应该尽量多使用组合和聚合关联关系,尽量少使用甚 至不使用继承关系 | ★★★★☆  |
 |          迪米特法则 (Law of Demeter, LoD)           | 一个软件实体对其他实体的引用越少越好,或者说如果两个类 不必彼此直接速信,那么这两个类就不应当发生直接的相互作 用,而是通过引入一个第三者发生间接交互 | ★★★☆☆  |
+
+
+
+
 
 
 
