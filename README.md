@@ -95,7 +95,7 @@ fatal: unable to access 'https://github.com/luolin2611/life-code/': LibreSSL SSL
 
 
 
-### 5.其它
+### 5.技术杂货间
 
 #### 1.生成banner
 > 地址： https://www.bootschool.net/ascii
@@ -180,6 +180,18 @@ CollectionUtils.isEmpty();
 CollectionUtils.isNotEmpty();
 ```
 
+#### 8.使用StringBuilder 的技巧
+
+利用构建者方法去使用
+
+```java
+String userDetail = new StringBuilder()
+                .append("rollin")
+                .append(26)
+                .append("只要自己不尴尬，尴尬的是别人。")
+                .toString();
+```
+
 ### 6.SQL 技术沉淀
 
 #### 1.使用分组group by (有‘每’字就可以考虑分组)
@@ -190,7 +202,7 @@ CollectionUtils.isNotEmpty();
 SELECT SUM(bill_money) , MONTH(update_time) FROM record_account WHERE classify_type = '0' AND YEAR(update_time) = '2021' GROUP BY MONTH(update_time) ORDER BY MONTH(update_time) DESC
 ```
 
-##### 1.2 sql 执行书序：温(when)哥(group by)华(having)白(group by)领(limit)
+##### 1.2 sql 执行书序：温(when)哥(group by)华(having)白(order by)领(limit)
 
 
 
@@ -257,7 +269,7 @@ SELECT SUM(bill_money) , MONTH(update_time) FROM record_account WHERE classify_t
 
 小圆圈来进行表示。
 
-![image-20210905154215104](/Volumes/FILE_WORK/work/Code/SpringBoot/life-code/folder/image/image-20210905154215104.png)
+![image-20210905154215104](folder/image/image-20210905154215104.png)
 
 #### 3.类图
 
@@ -391,6 +403,251 @@ Person 类的子类，其类图如图所示。
 |     合成复用原则 (Comotite euse Principle,CRP)      | 在系统中应该尽量多使用组合和聚合关联关系,尽量少使用甚 至不使用继承关系 | ★★★★☆  |
 |          迪米特法则 (Law of Demeter, LoD)           | 一个软件实体对其他实体的引用越少越好,或者说如果两个类 不必彼此直接速信,那么这两个类就不应当发生直接的相互作 用,而是通过引入一个第三者发生间接交互 | ★★★☆☆  |
 
+#### 单一职责原则
+
+##### 单一职责原则定义
+
+* 单一职责原则(Single Responsibility Principle,SRP)定义如下:
+  一个对象应该只包含单一的职责，并且该职责被完整地封装在一个类中。
+* 其英文定义为:
+  Every object should have a single responsibility, and that responsibility should be entirely encapsulated by the class.
+* 另一种定义方式如下:
+  就一个类而言，应该<font style="color: red;">仅有一个引起它变化的原因。</font>
+* 其英文定义为:
+  There should never be more than one reason for a class to change.
+
+##### 单一职责原则分析
+
+* <font style="color: red;">一个类(或者大到模块，小到方法)承担的职责越多，它被复用的可能性越小</font>，而且如果一个类承担的职责过多，就相当于将这些职责耦合在一起，当其中一个职责变化时，可能会影响其他职责的运作。
+* 类的职责主要包括两个方面:<font style="color: red;">数据职责和行为职责，数据职责通过其属性来体现，而行为职责通过其方法来体现。</font>
+* 单一职责原则是实现<font style="color: red;">高内聚、低耦合</font>的指导方针，在很多代码重松手法中都能找到它的存在，它是最简单但又最难运用的原则，需要设计人员发现类的不同职责并将其分离，而发现类的多重职责需要设计人员具有较强的分析设计能力和相关重构经验。
+
+##### 单一职责实例
+
+###### 实例说明
+
+* 某个基于Java的C/S系统的“登录功能”，通过如下登录类（Login）实现:
+
+  ![image-20210907075112400](folder/image/image-20210907075112400.png)
+
+* 现使用单一职责原则对其重构
+
+![image-20210908064518312](folder/image/image-20210908064518312.png)
+
+#### 开闭原则
+##### 开闭原则定义
+
+开闭原则(Open-Closed Principle,OCP)定义如下:
+
+* 一个软件实体应当<font style="color: red;">对扩展开放，对修改关闭</font>。也就是说在设计一个模块的时候，应当使这个模块可以在不被修改的前提下被扩展，即实现在不修改源代码的情况下改变这个模块的行为。
+
+其英文定义为:
+
+* Software entities should be open for extension, but closed for modification.
+
+##### 开闭原则分析
+
+* 开闭原则由Bertrand Meyer于1988年提出，它是面向对象设计中最重要的原则之一。
+* 在开闭原则的定义中，<font style="color: red;">软件实体可以指一个软件模块、一个由多个类组成的局部结构或一个独立的类</font>。
+* <font style="color: red;">抽象化</font>是开闭原则的关键。
+* 开闭原则还可以通过一个更加具体的“<font style="color: red;">对可变性封装原则</font>”来描述，对可变性封装原则(Principle of Encapsulation of Variation,EVP)要求找到系统的可变因素并将其封装起来。
+
+##### 开闭原则实例
+###### 实例一
+
+* 某图形界面系统提供了各种不同形状的按钮，客户端代码可针对这些按钮进行编程，用户可能会改变需求要求使用不同的按钮，原始设计方案如图所示:
+
+![image-20210908071103127](/Volumes/FILE_WORK/work/Code/SpringBoot/life-code/folder/image/image-20210908071103127.png)
+
+* 现对该系统进行重构，使之满足开闭原则的要求（如图将可变的内容，放在配置xml文件中）。
+
+![image-20210909074259495](folder/image/image-20210909074259495.png)
+
+###### 实例二
+
+![image-20210911222020349](folder/image/image-20210911222020349.png)
+
+* 存在问题
+
+  1.Client和Server都是具体类;如果Client对象想使用其他
+
+  2.Server对象，则需要将Cient类中所有使用Server类的地方都进行修改。
+
+* 改造后
+
+![image-20210911222806727](/Volumes/FILE_WORK/work/Code/SpringBoot/life-code/folder/image/image-20210911222806727.png)
+
+说明：<font style="color: red;">多基于接口编程，接口是稳定的，实体类是不稳定的。</font>
+
+​	1.Client类使用 ClientInterface抽象类;
+
+​	2.Client类的对象却使用 Server类的派生类的对象:
+
+​	3.如果 Client对象想使用一个不同的服务器类,则只需要从ClientInterface类派生个新的类。无需对 Cient类做任何改动
+
+#### 里氏替换原则
+
+##### 里氏替换原则定义
+
+里氏替换原则(Liskov Substitution PrincipleLSP)有两种定义方式，
+
+* 第一种定义方式相对严格，其定义如下:
+  如果对每一个类型为S的对象o1，都有类型为T的对象o2，使得以T定义的所有程序P在所有的对象o1都替换成o2时，<font style="color: red;">程序P的行为没有变化</font>，那么类型S是类型T的子类型。
+
+  其英文定义为:
+  If for each object o1 of type s there is an object o2 of type Tsuch that for all programs P defined in terms of T, the behavior of Pis unchanged when o1 is substituted for o2 then S is a subtype of T.
+
+* 第二种更容易理解的定义方式如下:
+  <font style="color: red;">所有引用基类(父类)的地方必须能透明地使用其子类的对象。</font>
+
+  其英文定义为:
+  Functions that use pointers or references to base classes must be able to use objects of derived classes without knowing it.
+
+##### 里氏替换原则分析
+
+* 里氏替换原则可以通俗表述为:在软件中<font style="color: #ff5223;">如果能够使用基类对象，那么一定能够使用其子类对象。</font>把基类都替换成它的子类，<font style="color: red;">程序将不会产生任何错误和异常</font>，反过来则不成立，如果一个软件实体使
+
+  用的是一个子类的话那么它不一定能够使用基类。
+
+* 里氏替换原则是实现开闭原则的重要方式之一，由于使用基类对象的地方都可以使用子类对象，因此<font style="color: red;">在程序中尽量使用基类类型来对对象进行定义，而在运行时再确定其子类类型，用子类对象来替换父类对象</font>。
+
+##### 里氏替换原则实例
+
+###### 实例一
+
+* 某系统需要实现对重要数据(如用户密码)的加密处理，在数据操作类(DataOperator)中需要调用加密类中定义的加密算法，系统提供了两个不同的加密类，CipherA和CipherB，它们实现不同的加密方法，在DataOperator中可以选择其中的一个实现加密操作。如图所示:
+
+![image-20210912115742367](/Volumes/FILE_WORK/work/Code/SpringBoot/life-code/folder/image/image-20210912115742367.png)
+
+
+* 1) 如果需要更换一个加密算法类或者增加并使用一个新的加密算法类，如将CipherA改为CipherB，则需要修改客户类Client和数据操作类DataOperator的源代码，违背了开闭原则。
+  2) 现使用里氏替换原则对其进行重构，使得系统可以灵活扩展，符合开闭原则。
+
+![image-20210912162700831](folder/image/image-20210912162700831.png)
+
+如何代码里面有大量的if - else 或者 case 语句的时候，可以考虑使用里氏替换原则了。
+
+###### 实例二
+
+![image-20210912163737544](folder/image/image-20210912163737544.png)
+
+如果要增加一个不需要工资的VolunteerEmployee，CalcPay() 如何计算？
+
+```java
+// 方式一，意义不大
+public VolunteerEmployee extends Employee {
+		public void calcPay() {
+				return 0;
+		}
+}
+
+// 方式二、
+public VolunteerEmployee extends Employee {
+		public void calcPay() {
+				throw new UnpaybleEmployeeException();
+		}
+}
+```
+
+* 每次调用calcPay方法将会抛出一个UnpayableEmployeeException异常，因此，要么异常必须被捕获，要么被调用者说明，
+  因此，在一个派生类上的约束已经影响到了基类用户。
+
+```java
+for(int i=0; i<employees.size(); i++) {
+		Employee e = employees.get(i);
+		totalPay += e.calcPay();
+}
+```
+
+为了使用合法，我们将这个调用放到try/catch中 (此方式不妥)
+
+```java
+for(int i=0; i<employees.size(); i++) {
+		Employee e = employees.get(i);
+		try {
+				totalPay += e.calcPay();
+		} catch(UnpaybleEmployeeException e) {
+				
+		}
+}
+```
+
+或者使用另一种方式，看起来简洁，其实也不妥（此种方式更糟糕， 因为直接暴露了子类，而里氏替换原则重要的一点是，子类替换基类，<font style="color: red;">程序的行为不发生变化</font>，而此处需要单独处理已经变化）
+
+```java
+for(int i=0; i<employees.size(); i++) {
+		Employee e = employees.get(i);
+		if(!(e intanceof VolunteerEmployee)) {
+				totalPay += e.calcPay();
+		}
+}
+```
+
+* 上述方式更糟糕!因为原来基于Employee基类的代码，现在必须明确要引用它的一个子类。
+* 根源就在于违背了LSP，因为VolunteerEmployee不能替代 Employee类
+* 只要当你调用一个派生类上的方法时造成了非法使用，你就在违反了LSP原则:如果你使用了一个退化的派生类的方法(什么也没实现或者像是上面的return 0和异常)，你也正在违反LSP原则。此时，说明该方法对派生类是无意义的。
+* IS-A(继承)是关于行为的!
+
+综上的处，此处的VolunteerEmployee继承是没有意义的。
+
+###### 实例三
+
+![image-20210912174751919](folder/image/image-20210912174751919.png)
+
+​	如果程序遵循里氏替换原则，继承就能成为降低复杂度的一个强大工具，因为它能让程序员关注于对象的一般特性而不必担心细节。如果程序员必须要不
+新地思考不同派生类的实现在语义上的差异，继承就只会增加复杂度了。
+
+#### 依赖倒置原则
+
+##### 依赖倒置原则定义
+
+* 依赖倒置原则(Dependence Inversion PrincipleDIP)的定义如下:
+
+  1.高层模块不应该依赖低层模块，它们都应该依赖抽象。
+
+  2.抽象<font style="color: red;">不应该依赖于细节</font>，细节应该<font style="color: red;">依赖于抽象</font>。
+
+* 其英文定义为:
+  High level modules should not depend upon low level modules, both should depend upon abstractions. Abstractions should not depend upon details, details should depend upon abstractions.
+  
+* 另一种表述为:
+  要<font style="color: red;">针对接口编程，不要针对实现编程</font>。
+  
+* 其英文定义为:
+  Program to an interface, not an implementation.
+
+![image-20210914075455766](folder/image/image-20210914075455766.png)
+
+* 结构良好的的面向对象架构都具有清晰的层次定义， 每个层次通过一个定义良好的、受控的接口向外提供一组内聚的服务。
+* 高层Policy Layer->低层Mechanism Layer->低层Utility Layer，<font style="color: red;">看起来似乎正确。</font>
+* Policy Layer对于依赖的2个layer的<font style="color: red;">改动都是敏感的</font>。
+
+##### 依赖置原则分析
+
+* 简单来说，依赖倒置原则就是指: <font style="color: red;">代码要依赖于抽象的类，而不要依赖于具体的类;要针对接口或抽象类编程而不是针对具体类编程。</font>
+
+> 更好的描述是:**不要依赖那些容易变化的具体类**。如果你要继承一个类，从一个抽象类继承吧。如果你要持有一个类的引用，从一个抽象的类引用吧。如果你要调用一个函数，从一个抽象的函数调用吧。
+
+* 实现开闭原则的关键是抽象化，并且从抽象化导出具体化实现，如果说<font style="color: red;">开闭原则是面向对象设计的目标的话那么依赖倒置原则就是面向对象设计的主要手段。</font>
+
+* 依赖倒置原则的常用实现方式之一是<font style="color: red;">在代码中使用抽象类，而将具体类放在配置文件中。</font>
+
+  1.<font style="color: red;">“将抽象放进代码，将细节放进元数据”</font>
+  2.Put Abstractions in Code, Details in Metadata
+
+* 类之间的耦合
+
+  1.<font style="color: red;">零耦合</font>关系
+
+  2.<font style="color: red;">具体耦合</font>关系
+
+  3.<font style="color: red;">抽象耦合</font>关系
+
+* 依赖倒置原则要求客户端依赖于抽象耦合，<font style="color: red;">以抽象方式耦合是依赖倒置原则的关键。</font>
+
+![image-20210915080747396](folder/image/image-20210915080747396.png)
+
+图中看出，高层不要依赖底层，底层也不要依赖高层，他们依赖抽象。 
 
 
 
@@ -402,6 +659,25 @@ Person 类的子类，其类图如图所示。
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### 23种设计模式
+
+ 
 
 
 
@@ -418,6 +694,10 @@ Person 类的子类，其类图如图所示。
 #### 2.红色文字
 
 <font style="color: red;">color</font>
+
+```
+<font style="color: red;"></font>
+```
 
 #### 3.评级
 
