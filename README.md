@@ -457,7 +457,7 @@ Person 类的子类，其类图如图所示。
 
 * 某图形界面系统提供了各种不同形状的按钮，客户端代码可针对这些按钮进行编程，用户可能会改变需求要求使用不同的按钮，原始设计方案如图所示:
 
-![image-20210908071103127](/Volumes/FILE_WORK/work/Code/SpringBoot/life-code/folder/image/image-20210908071103127.png)
+![image-20210908071103127](folder/image/image-20210908071103127.png)
 
 * 现对该系统进行重构，使之满足开闭原则的要求（如图将可变的内容，放在配置xml文件中）。
 
@@ -706,17 +706,82 @@ for(int i=0; i<employees.size(); i++) {
 (1)一个接口就<font style="color: red;">只代表一个角色</font>，每个角色都有它特定的一个接口，此时这个原则可以叫做“角色隔离原则”。
 (2)接口<font style="color: red;">仅仅提供客户端需要的行为</font>，即所需的方法，客户端不需要的行为则隐藏起来，应当为客户端提供尽可能小的单独的接口，而不要提供大的总接口。
 
+* 使用接口隔离原则拆分接口时，首先必须满足<font style="color: red;">单一职责原则</font>，将一组相关的操作定义在一个接口中，且在满足高内聚的前提下，接口中的方法越少越好。
+* 可以在进行系统设计时采用<font style="color: red;">定制服务</font>的方式，即<font style="color: red;">为不同的客户端提供宽窄不同的接口</font>，只提供用户需要的行为，而隐藏用户不需要的行为。
+
+##### 实例说明
+
+* 开发人员针对某CRM系统的客户数据显示模块设计了如图所示接口，其中dataReadO用于从文件中读取数据，transformToXMLO用于将数据转换成XML格式，方法createChart()用于创建图表，
+  displayChart0用于显示图表，createReport0用于创建文字报表， displayReport0用于显示文字报表。
+
+![image-20210917223940445](folder/image/image-20210917223940445.png)
+
+1、如果数据格式为xml，无须转换，怎么办! 
+
+​	<font style="color: red;">transformToXML() {}</font>
+
+2、如果仅需要创建和显示图表，该怎么办?
+
+​	<font style="color: red;">除了需实现与图表相关的方法外。还需要实现创建和显示文字报表的方法。否则程序编译时将报错</font>
+
+* 设计存在问题:<font style="color: red;">接口承担了太多职责</font>
+	1.导致该接口的<font style="color: red;">实现类很庞大</font>，实现类中都需要实现接口所有方法灵活性较差,如果<font style="color: red;">出现大量的空方法</font>，将导致系统中产生大量的无用代码影响代码质量:	
+	
+	2.由于客户端针对大接口编程将在<font style="color: red;">一定程度上破坏程序的封装性</font>,客户端看到了不应该看到的方法,没有为客户端定制接口。
+	
+	3.因此需要按照<font style="color: red;">接口隔离原则和单一职责原则进行重构</font>。将其中的一些方法封装在不同的小接口中,确保每一个接口使用起来都较为方便并都承担某一单一角色,每个接口中只包含一个客户端(如模块或类)所需的方法即可。
+
+![image-20210918071301537](folder/image/image-20210918071301537.png)
+
+#### 迪米特法则
+
+* 迪米特法则定义
+
+  迪米特法则(LawofDemeterLoD)又称为最少知识原则(Least Knowledge PrincipleLKP)，它有多种定义方法，其中几种典型定义如下:
+  	(1)<font style="color: red;">不要和“陌生人”说话</font>。英文定义为:Don't talk to strangers.
+  	(2)<font style="color: red;">只与你的直接朋友通信</font>。英文定义为:Talk only to your immediate friends.
+  	(3)<font style="color: red;">每一个软件单位对其他的单位都只有最少的知识，而且局限于那些与本单位密切相关的软件单位</font>。英文定义为:Each unit should have only limited knowledge about other units: only units"closely" related to the current unit.
+
+* 迪米特法则分析
+
+  1.迪米特法则来自于1987年秋美国东北大学Northeastern University)一个名为“Demeter"的研究项目。
+  2.简单地说，迪米特法则就是指<font style="color: red;">一个软件实体应当尽可能少的与其他实体发生相互作用</font>。这样，当一个模块修改时，就会尽量少的影响其他的模块，扩展会相对容易，这是对软件实体之间<font style="color: red;">通信的限制</font>，它要求限制软件实体之间通信的<font style="color: red;">宽度和深度</font>。
+
+![image-20210918073811148](folder/image/image-20210918073811148.png)
+
+ 
+
+* 在迪米特法则中，对于一个对象，其朋友包括以下几类:
+
+  (1(this)
+  (2)以参数形式传入到当前对象方法中的对象;(3)当前对象的成员对象;
+  (4)如果当前对象的成员对象是一个集合，那么集合中的元素也都是朋友;
+  (5)当前对象所创建的对象。
+
+```java
+public class A {
+	void method1(B b) {
+		int x;
+	}
+	private String name;
+	private List aList;
+	// aList[0]
+}
+```
+
+* 任何一个对象，如果满足上面的条件之一，就是当前对象的“朋友”，否则就是“陌生人”。
+
+* 迪米特法则可分为狭义法则和广义法则。<font style="color: red;">在狭义的迪米特法则中如果两个类之间不必彼此直接通信，那么这两个类就不应当发生直接的相互作用</font>，如果其中的一个类需要调用另一个类的某一个方法的话，可以通过<font style="color: red;">第三者转发这个调用</font>。
+
+![image-20210918074604726](folder/image/image-20210918074604726.png)
+
+* 狭义的迪米特法则:可以<font style="color: red;">降低类之间的耦合</font>，但是会在系统中增加大量的小方法并散落在系统的各个角落，它可以使一个系统的局部设计简化因为每一个局部都不会和远距离的对象有直接的关联，但是也会<font style="color: red;">造成系统的不同模块之间的通信效率降低</font>，使得系统的不同模块之间不容易协调。
+* 广义的迪米特法则:<font style="color: red;">指对对象之间的信息流量、流向以及信息的影响的
+控制</font>，主要是<font style="color: red;">对信息隐藏的控制</font>。信息的隐藏可以使各个子系统之间脱耦，从而允许它们独立地被开发、优化、使用和修改，同时可以促进软件的复用，由于每一个模块都不依赖于其他模块而存在，因此每一个模块都可以独立地在其他的地方使用。一个系统的规模越大，信息的隐藏就越重要，而信息隐藏的重要性也就越明显。
 
 
 
-
-
-
-
-
-
-
-
+ 
 
 ### 23种设计模式
 
