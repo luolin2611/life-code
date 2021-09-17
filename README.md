@@ -645,23 +645,66 @@ for(int i=0; i<employees.size(); i++) {
 
 * 依赖倒置原则要求客户端依赖于抽象耦合，<font style="color: red;">以抽象方式耦合是依赖倒置原则的关键。</font>
 
-![image-20210915080747396](folder/image/image-20210915080747396.png)
+![image-20210916070420564](/Volumes/FILE_WORK/work/Code/SpringBoot/life-code/folder/image/image-20210916070420564.png)
 
 图中看出，高层不要依赖底层，底层也不要依赖高层，他们依赖抽象。 
 
+* 依赖注入	
 
+  1.构造注入(ConstructorInjection):通过<font style="color: red;">构造函数</font>注入实例变量。
+  
+  2.设值注入(SetterInjection):通过<font style="color: red;">Setter方法</font>注入实例变量。
+  
+  3.接口注入(InterfaceInjection):通过<font style="color: red;">接口方法</font>注入实例变量。
 
+* 实例说明
+  1.某系统提供一个数据转换模块，可以将来自不同数据源的数据转换成多种格式，如可以转换来自数据库的数据(DatabaseSource)、也可以转换来自文本文件的数据(TextSource)，转换后的格式可以是 XML文件(XMLTransformer)、也可以是XLS文件(XLSTransformer)等。
 
+![image-20210916072903973](folder/image/image-20210916072903973.png)
 
+​	2.由于需求的变化，该系统可能需要<font style="color: red;">增加新的数据源或者新的文件格式</font>，每增加一个新的类型的数据源或者新的类型的文件格式，客户类MainClass都需要<font style="color: red;">修改源代码</font>以便使用新的类，但违背了开闭原则。现使用依赖倒置原则对其进行重构。
 
+![image-20210916074614246](folder/image/image-20210916074614246.png)
 
+抽象类（稳定的）提现了隔离的作用，把C和S进行隔离。  （C(MainClass) 依赖抽象 A(Abstract)， S(DataSource) 依赖抽象的 A）
 
+#### 接口隔离原则
 
+##### 接口隔志原别定义
 
+* 接口隔离原则(Interface Segregation Principle,ISP)的定义如下:
+  客户端<font style="color: red;">不应该依赖</font>那那些<font style="color: red;">它不需要的接口</font>。
+* 其英文定义为:
+  Clients should not be forced to depend upon interfaces that they do not usa.
+* 注意，在该定义中韵接口指的是所定义的方法。
+* 另一种定文方球如下:
+  一旦一个接口太大，则需要将它分划成一在重细小的接口，使用该接口的客户端仅需知道一之相关的方法即可。
+* 其英文定义为:
+  Once an interface has gotten too 'fat' it neads to be split
+  into smmaller and more specffic interfaces so that any clients of the interface will ony know about the methods that pertain to thom.
 
+##### 接口隔离原则定义
 
+* 接口隔离原则(Interface Segregation Principle,ISP)的定义如下:
 
+  客户端<font style="color: red;">不应该依赖</font>那些它<font style="color: red;">不需要的接口</font>。
 
+* 其英文定义为:
+  Clients should not be forced to depend upon interfaces that
+  they do not use.
+  
+* 注意，在该定义中的接口指的是所定义的方法。
+  
+* 另一种定义方法如下:
+  一旦一个<font style="color: red;">接口太大</font>，则需要将它<font style="color: red;">分割成一些更细小的接口</font>，使用该接口的客户端仅需知道与之相关的方法即可。
+  
+* 其英文定义为:
+   Once an interface has gotten too 'fat' it needs to be split
+  into smaller and more specific interfaces so that any clients of the interface will only know about the methods that pertain to them.
+
+* 接口隔离原则是指使<font style="color: red;">用多个专门的接口，而不使用单一的总接口</font>。每一个接口应该承担一种相对独立的角色，不多不少，不干不该干的事，该干的事都要干。
+(1)一个接口就<font style="color: red;">只代表一个角色</font>，每个角色都有它特定的一个接口，此时这个原则可以叫做“角色隔离原则”。
+(2)接口<font style="color: red;">仅仅提供客户端需要的行为</font>，即所需的方法，客户端不需要的行为则隐藏起来，应当为客户端提供尽可能小的单独的接口，而不要提供大的总接口。
 
 
 
