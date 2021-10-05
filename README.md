@@ -219,19 +219,6 @@ SELECT SUM(bill_money) , MONTH(update_time) FROM record_account WHERE classify_t
 ![image-20210720074548464](folder/image/image-20210720074548464.png)
 
 
-
-### 8.Mac操作习惯
-
-#### 1.触摸板常见设置
-
-![image-20210720075210481](folder/image/image-20210720075210481.png)
-
-![image-20210720075357150](folder/image/image-20210720075357150.png)
-
-![image-20210720075716244](folder/image/image-20210720075716244.png)
-
-
-
 ### 类、接口和类图
 
 #### 1.类
@@ -475,7 +462,7 @@ Person 类的子类，其类图如图所示。
 
 * 改造后
 
-![image-20210911222806727](/Volumes/FILE_WORK/work/Code/SpringBoot/life-code/folder/image/image-20210911222806727.png)
+![image-20210911222806727](folder/image/image-20210911222806727.png)
 
 说明：<font style="color: red;">多基于接口编程，接口是稳定的，实体类是不稳定的。</font>
 
@@ -517,7 +504,7 @@ Person 类的子类，其类图如图所示。
 
 * 某系统需要实现对重要数据(如用户密码)的加密处理，在数据操作类(DataOperator)中需要调用加密类中定义的加密算法，系统提供了两个不同的加密类，CipherA和CipherB，它们实现不同的加密方法，在DataOperator中可以选择其中的一个实现加密操作。如图所示:
 
-![image-20210912115742367](/Volumes/FILE_WORK/work/Code/SpringBoot/life-code/folder/image/image-20210912115742367.png)
+![image-20210912115742367](folder/image/image-20210912115742367.png)
 
 
 * 1) 如果需要更换一个加密算法类或者增加并使用一个新的加密算法类，如将CipherA改为CipherB，则需要修改客户类Client和数据操作类DataOperator的源代码，违背了开闭原则。
@@ -645,19 +632,20 @@ for(int i=0; i<employees.size(); i++) {
 
 * 依赖倒置原则要求客户端依赖于抽象耦合，<font style="color: red;">以抽象方式耦合是依赖倒置原则的关键。</font>
 
-![image-20210916070420564](/Volumes/FILE_WORK/work/Code/SpringBoot/life-code/folder/image/image-20210916070420564.png)
+![image-20210916070420564](folder/image/image-20210916070420564.png)
 
 图中看出，高层不要依赖底层，底层也不要依赖高层，他们依赖抽象。 
 
 * 依赖注入	
 
   1.构造注入(ConstructorInjection):通过<font style="color: red;">构造函数</font>注入实例变量。
-  
+
   2.设值注入(SetterInjection):通过<font style="color: red;">Setter方法</font>注入实例变量。
-  
+
   3.接口注入(InterfaceInjection):通过<font style="color: red;">接口方法</font>注入实例变量。
 
-* 实例说明
+##### 实例说明
+
   1.某系统提供一个数据转换模块，可以将来自不同数据源的数据转换成多种格式，如可以转换来自数据库的数据(DatabaseSource)、也可以转换来自文本文件的数据(TextSource)，转换后的格式可以是 XML文件(XMLTransformer)、也可以是XLS文件(XLSTransformer)等。
 
 ![image-20210916072903973](folder/image/image-20210916072903973.png)
@@ -669,19 +657,6 @@ for(int i=0; i<employees.size(); i++) {
 抽象类（稳定的）提现了隔离的作用，把C和S进行隔离。  （C(MainClass) 依赖抽象 A(Abstract)， S(DataSource) 依赖抽象的 A）
 
 #### 接口隔离原则
-
-##### 接口隔志原别定义
-
-* 接口隔离原则(Interface Segregation Principle,ISP)的定义如下:
-  客户端<font style="color: red;">不应该依赖</font>那那些<font style="color: red;">它不需要的接口</font>。
-* 其英文定义为:
-  Clients should not be forced to depend upon interfaces that they do not usa.
-* 注意，在该定义中韵接口指的是所定义的方法。
-* 另一种定文方球如下:
-  一旦一个接口太大，则需要将它分划成一在重细小的接口，使用该接口的客户端仅需知道一之相关的方法即可。
-* 其英文定义为:
-  Once an interface has gotten too 'fat' it neads to be split
-  into smmaller and more specffic interfaces so that any clients of the interface will ony know about the methods that pertain to thom.
 
 ##### 接口隔离原则定义
 
@@ -702,11 +677,14 @@ for(int i=0; i<employees.size(); i++) {
    Once an interface has gotten too 'fat' it needs to be split
   into smaller and more specific interfaces so that any clients of the interface will only know about the methods that pertain to them.
 
+##### 接口隔离原则分析
+
 * 接口隔离原则是指使<font style="color: red;">用多个专门的接口，而不使用单一的总接口</font>。每一个接口应该承担一种相对独立的角色，不多不少，不干不该干的事，该干的事都要干。
 (1)一个接口就<font style="color: red;">只代表一个角色</font>，每个角色都有它特定的一个接口，此时这个原则可以叫做“角色隔离原则”。
 (2)接口<font style="color: red;">仅仅提供客户端需要的行为</font>，即所需的方法，客户端不需要的行为则隐藏起来，应当为客户端提供尽可能小的单独的接口，而不要提供大的总接口。
 
 * 使用接口隔离原则拆分接口时，首先必须满足<font style="color: red;">单一职责原则</font>，将一组相关的操作定义在一个接口中，且在满足高内聚的前提下，接口中的方法越少越好。
+
 * 可以在进行系统设计时采用<font style="color: red;">定制服务</font>的方式，即<font style="color: red;">为不同的客户端提供宽窄不同的接口</font>，只提供用户需要的行为，而隐藏用户不需要的行为。
 
 ##### 实例说明
@@ -735,17 +713,17 @@ for(int i=0; i<employees.size(); i++) {
 
 #### 迪米特法则
 
-* 迪米特法则定义
+##### 迪米特法则定义
 
-  迪米特法则(LawofDemeterLoD)又称为最少知识原则(Least Knowledge PrincipleLKP)，它有多种定义方法，其中几种典型定义如下:
-  	(1)<font style="color: red;">不要和“陌生人”说话</font>。英文定义为:Don't talk to strangers.
-  	(2)<font style="color: red;">只与你的直接朋友通信</font>。英文定义为:Talk only to your immediate friends.
-  	(3)<font style="color: red;">每一个软件单位对其他的单位都只有最少的知识，而且局限于那些与本单位密切相关的软件单位</font>。英文定义为:Each unit should have only limited knowledge about other units: only units"closely" related to the current unit.
+迪米特法则(LawofDemeterLoD)又称为最少知识原则(Least Knowledge PrincipleLKP)，它有多种定义方法，其中几种典型定义如下:
+	(1)<font style="color: red;">不要和“陌生人”说话</font>。英文定义为:Don't talk to strangers.
+	(2)<font style="color: red;">只与你的直接朋友通信</font>。英文定义为:Talk only to your immediate friends.
+	(3)<font style="color: red;">每一个软件单位对其他的单位都只有最少的知识，而且局限于那些与本单位密切相关的软件单位</font>。英文定义为:Each unit should have only limited knowledge about other units: only units"closely" related to the current unit.
 
-* 迪米特法则分析
+##### 迪米特法则分析
 
-  1.迪米特法则来自于1987年秋美国东北大学Northeastern University)一个名为“Demeter"的研究项目。
-  2.简单地说，迪米特法则就是指<font style="color: red;">一个软件实体应当尽可能少的与其他实体发生相互作用</font>。这样，当一个模块修改时，就会尽量少的影响其他的模块，扩展会相对容易，这是对软件实体之间<font style="color: red;">通信的限制</font>，它要求限制软件实体之间通信的<font style="color: red;">宽度和深度</font>。
+1.迪米特法则来自于1987年秋美国东北大学Northeastern University)一个名为“Demeter"的研究项目。
+2.简单地说，迪米特法则就是指<font style="color: red;">一个软件实体应当尽可能少的与其他实体发生相互作用</font>。这样，当一个模块修改时，就会尽量少的影响其他的模块，扩展会相对容易，这是对软件实体之间<font style="color: red;">通信的限制</font>，它要求限制软件实体之间通信的<font style="color: red;">宽度和深度</font>。
 
 ![image-20210918073811148](folder/image/image-20210918073811148.png)
 
@@ -779,17 +757,80 @@ public class A {
 * 广义的迪米特法则:<font style="color: red;">指对对象之间的信息流量、流向以及信息的影响的
 控制</font>，主要是<font style="color: red;">对信息隐藏的控制</font>。信息的隐藏可以使各个子系统之间脱耦，从而允许它们独立地被开发、优化、使用和修改，同时可以促进软件的复用，由于每一个模块都不依赖于其他模块而存在，因此每一个模块都可以独立地在其他的地方使用。一个系统的规模越大，信息的隐藏就越重要，而信息隐藏的重要性也就越明显。
 
+* 迪米特法则的主要用途在于<font style="color: red;">控制信息的过载:</font>
+
+  1.在类的划分上，应当尽量<font style="color: red;">创建松耦合的类</font>，类之间的耦合度越低，就越有利于复用，一个处在松耦合中的类一旦被修改，不会对关联的类造成太大波及;
+  2.在类的结构设计上，每一个类都应当<font style="color: red;">尽量降低其成员变量和成员函数的访问权限;</font>
+  3.在类的设计上，只要有可能，<font style="color: red;">一个类型应当设计成不变类；（如果一个类是final则不可以继承，如果是final属性则不可以改变属性，如果是final方法，则不可以重写）
+  4.在对其他类的引用上，<font style="color: red;">一个对象对其他对象的引用应当降到最低。</font>
+
+#####  实例说明
+
+* 某系统界面类(如Form1、Form2等类)与数据访问类(如 DAO1、DAO2等类)之间的调用关系较为复杂，如图所示:
+
+![image-20210918214310663](folder/image/image-20210918214310663.png)
+
+如果Dao2变更，则所有的Form都得变更，依赖太强了，违背迪米特松耦合的原则，所以应该解耦。
+
+![image-20210918214515531](folder/image/image-20210918214515531.png)
+
+#### 合成复用原则
+
+##### 合成复用原则定义
+
+* 合成复用原则(Composite Reuse Principle,CRP)又称为组合/聚合复用原则(Composition/ Aggregate Reuse Principle, CARP)，其定义如下: 
+
+  <font style="color: red;">尽量使用对象组合</font>，而<font style="color: red;">不是继承</font>来达到复用的目的。
+
+* 其英文定义为:
+  Favor composition of objects over inheritance as a reuse mechanism.
+
+##### 合成复用原则分析
+
+* 合成复用原则就是指在一个新的对象里通过<font style="color: red;">关联关系(包括组合关系和聚合关系)</font>来使用一些已有的对象使之成为新对象的一部分;新对象<font style="color: red;">通过委派调用已有对象的方法达到复用其已有功能的目的。</font>简言之:要<font style="color: red;">尽量使用组合/聚合关系，少用继承。</font>
+
+* 在面向对象设计中，可以通过两种基本方法在不同的环境中复用已有的设计和实现，即通过<font style="color: red;">组合/聚合关系</font>或通过<font style="color: red;">继承</font>。
+  1.<font style="color: red;">继承复用</font>:实现简单，易于扩展。破坏系统的封装性;从基类继承而来的实现是静态的，不可能在运行时发生改变，没有足够的灵活性;只能在有限的环境中使用。(<font style="color: red;">“白箱”</font>复用)，即是透明的使用，你知道里面的方法。
+
+  2.<font style="color: red;">组合/聚合复用</font>:耦合度相对较低，选择性地调用成员对象的操作;可以在运行时动态进行。(<font style="color: red;">“黑箱”</font>复用)，A调用B里面的方法，怎么实现的都不知道。
+
+* 组合/聚合可以<font style="color: red;">使系统更加灵活</font>，类与类之间的<font style="color: red;">耦合度降低</font>，一个类的变化对其他类造成的影响相对较少因此一般<font style="color: red;">首选使用组合/聚合来实现复用</font>;其次才考虑继承，在使用继承时，<font style="color: red;">需要亚格遵循里氏替换原则</font>有效使用继承会有助于对问题的理解，降低复杂度而滥用继承反而会增加系统构建和维护的难度以及系统的复杂度，因此需要<font style="color: red;">慎重使用继承复用</font>。
+
+##### 实例说明
+
+* 某教学管理系统部分数据库访问类设计如图所示:
+
+![image-20210919074407650](folder/image/image-20210919074407650.png)
+
+使用继承复用父类的getConnection方法。判断一个程序的好坏，<font style="color: red;">那就假设需求的变化，看该设计是否稳定</font>。
+
+* 如果需要更换数据库连接方式，如原来采用JDBC连接数据库，现在采用数据库连接池连接，则需要修改DBUtil类源代码。如果StudentDAO采用JDBC连接，但是TeacherDAO采用连接池连接，则需要增加一个新的DBUtil类，"并修改StudentDAo或TeacherDAO的源代码，使之继承新的数据库连接类，这将违背开闭原则，系统扩展性较差。
+* 现使用合成复用原则对其进行重构。
+
+![image-20210919080205944](folder/image/image-20210919080205944.png)
+
+#### 本章小结
+
+* 对于面向对象的软件系统设计来说。"在支持<font style="color: red;">可维护性</font>的同时，需要提高系统的可<font style="color: red;">复用性</font>。
+* 软件的复用可以提高软件的开发<font style="color: red;">效率</font>，提高软件<font style="color: red;">质量</font>。约开发<font style="color: red;">成本</font>，恰当的复用还可以改善系统的可维护性。
+* 单一职责原则要求在软件系统中，一个类只负责一个功能领域中的相应职责。
+* 开闭原则要求一个软件实体应当对扩展开放，对修改关闭即在不修改源代码的基础上扩展一个系统的行为。
+* 里氏替换原则可以通俗表述为在软件中如果能够使用基类对象那么一定能够使用其子类对象。
+
+* 依赖倒置原则要求抽象不应该依赖于细节，细节应该依赖于抽象:要针对接口编程，不要针对实现编程。
+* 接口隔离原则要求客户端不应该依赖那些它不需要的接口即将一些大的接口细化成一些小的接口供客户端使用。
+* 合成复用原则要求复用时尽量使用对象组合。而不使用继承。
+* 迪米特法则要求一个软件实体应当尽可能少的与其他实体发生相互作用。
 
 
- 
+
+
+
+
+
+
 
 ### 23种设计模式
-
- 
-
-
-
-
 
 
 
