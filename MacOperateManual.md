@@ -7,9 +7,9 @@
 > 创建时间：2021-10-05 18:33:19
 >
 
-### Mac 触摸板操作
+## Mac 触摸板操作
 
-#### 触摸板常见设置
+### 触摸板常见设置
 
 ![image-20210720075210481](folder/image/image-20210720075210481.png)
 
@@ -17,9 +17,11 @@
 
 ![image-20210720075716244](folder/image/image-20210720075716244.png)
 
-#### 三指拖动窗口设置
+### 三指拖动窗口设置
 
 ![image-20211005182449801](folder/image/image-20211005182449801.png)
+
+## Mac 常用的操作
 
 ### Mac 去掉自动生成 “.DS_Store” 文件
 
@@ -49,4 +51,50 @@ defaults write com.apple.desktopservices DSDontWriteNetworkStores true
 $ defaults write com.apple.Finder AppleShowAllFiles YES  # YES表示显示文件， NO 表示隐藏文件
 $ killall Finder
 ```
+
+
+
+## Mac 软件常用的操作
+
+### VSCode 设置
+
+#### 使用" code . "打开项目
+
+在VSCode 面板 输入快捷键（Shif + Command + P） 且 输入 “shell command”安装即可
+
+![image-20211010155917683](folder/image/image-20211010155917683.png)
+
+
+
+在终端输入命令，"$ code . " 即可打开当前项目
+
+![image-20211010160128212](folder/image/image-20211010160128212.png)
+
+### 常用插件
+
+#### 文件导航图标( vscode-icons )
+
+![image-20211010162904402](/Volumes/FILE_WORK/work/Code/SpringBoot/life-code/folder/image/image-20211010162904402.png)
+
+#### VSCode 使用Eclipse 快捷键( Eclipse Keymap )
+
+![image-20211010163238511](/Volumes/FILE_WORK/work/Code/SpringBoot/life-code/folder/image/image-20211010163238511.png)
+
+#### 喜欢的主题( Dracula Official )
+
+![image-20211010163816474](folder/image/image-20211010163816474.png)
+
+
+
+#### Vue项目的工具包（ Vetur ）
+
+![image-20211010163816474](folder/image/image-20211010163816474.png)
+
+
+
+
+
+
+
+
 
