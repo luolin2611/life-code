@@ -54,7 +54,41 @@ $ killall Finder
 
 
 
+## Mac 常用的命令操作
+
 ## Mac 软件常用的操作
+
+### Mac 环境变量配置
+
+#### 设置 .zshrc
+
+说明：每次打开终端都需要执行命令 source ~/.bash_profile，解决办法。
+
+##### 打开.zshrc
+
+```java
+$ vi ~/.zshrc
+```
+
+##### 添加 source ~/.bash_profile 退出保存
+
+```
+source ~/.bash_profile
+```
+
+##### 执行命令
+
+```
+source ~/.zshrc
+```
+
+
+
+
+
+
+
+
 
 ### VSCode 设置
 

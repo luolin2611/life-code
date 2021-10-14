@@ -858,17 +858,17 @@ public class A {
 * 合成复用原则要求复用时尽量使用对象组合。而不使用继承。
 * 迪米特法则要求一个软件实体应当尽可能少的与其他实体发生相互作用。
 
-
-
-
-
-
-
-
-
 ### 23种设计模式
 
+#### 概述
 
+* 创建型模式：单例模式、抽象工厂模式、建造者模式、工厂模式、原型模式。
+* 结构型模式：适配器模式、桥接模式、装饰模式、组合模式、外观模式、享元模式、代理模式。
+* 行为型模式：模版方法模式、命令模式、迭代器模式、观察者模式、中介者模式、备忘录模式、解释器模式、状态模式、策略模式、责任链模式、访问者模式。
+
+
+
+工厂模式分类
 
 ### 常用样式模板
 
@@ -891,3 +891,92 @@ public class A {
 
 
 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
+
+
+
+
+
+
+
+https://www.bilibili.com/video/BV1TV411p7pd?p=50
+
+
+
+https://www.bilibili.com/video/BV1aU4y1t7F1?p=20&spm_id_from=pageDriver
+
+
+
+
+
+
+
+
+
+
+
+设计原则
+
+https://github.com/youlookwhat/DesignPattern
+
+
+
+设计模式
+
+
+
+Jvm 虚拟机
+
+
+
+
+
+并发编程
+
+https://www.bilibili.com/video/BV1fR4y1E7Ar?p=60
+
+
+
+
+
+Redis
+
+
+
+MQ	
+
+
+
+SpringBoot 
+
+
+
+SpringMVC
+
+
+
+微服务框架
+
+
+
+数据库（关系型数据库，NoSql）
+
+
+
+
+
+# Java自动生成bean、dao、service、impl、controller（JPA初版）
+
+https://blog.csdn.net/u011897110/article/details/89709868?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_title~default-5.no_search_link&spm=1001.2101.3001.4242
+
+
+
+
+
+
+
+
+
+
+
+
+
