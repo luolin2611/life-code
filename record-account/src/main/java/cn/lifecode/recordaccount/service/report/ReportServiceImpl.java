@@ -2,6 +2,7 @@ package cn.lifecode.recordaccount.service.report;
 
 import cn.lifecode.frameworkcore.bean.Request;
 import cn.lifecode.frameworkcore.bean.Response;
+import cn.lifecode.frameworkcore.util.Utils;
 import cn.lifecode.recordaccount.common.constant.Constant;
 import cn.lifecode.recordaccount.dto.bill.QueryBillInfoRequest;
 import cn.lifecode.recordaccount.dto.bill.QueryBillInfoResponse;
@@ -86,8 +87,8 @@ public class ReportServiceImpl implements ReportService {
         }
         double expense = recordAccountMapper.queryTotalMoney("0", dateType, startDate, body.getUserId());
         double income = recordAccountMapper.queryTotalMoney("1", dateType, startDate, body.getUserId());
-        response.setExpense(expense);
-        response.setIncome(income);
+        response.setExpense(Utils.getTwoDecimalPlaces(expense));
+        response.setIncome(Utils.getTwoDecimalPlaces(income));
         List<QueryReportInfoObject> objectList = reportMapper.queryReportInfo(dateType, startDate, "", body.getUserId(), body.getType());
         if (!objectList.isEmpty()) {
             int sum = 0;
@@ -104,6 +105,10 @@ public class ReportServiceImpl implements ReportService {
                 object.setProportion(object.getMoney() / sum);
                 objects.add(object);
             }
+            // 将金额格式化保留两位小数
+            objects.forEach(item -> {
+                item.setMoney(Utils.getTwoDecimalPlaces(item.getMoney()));
+            });
             response.setReportInfoList(objects);
         }
         return Response.success(response);

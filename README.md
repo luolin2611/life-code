@@ -218,9 +218,22 @@ String userDetail = new StringBuilder()
 
 ![image-20211008225641776](folder/image/image-20211008225641776.png)
 
+#### 格式化两位小数
 
+```java
+DecimalFormat decimalFormat = new DecimalFormat("0.00");
+String decimalFormat.setRoundingMode(RoundingMode.HALF_UP);
+double fValue = Double.parseDouble(decimalFormat.format(value));
+```
 
+#### 过滤对象
 
+```
+// 将金额格式化保留两位小数
+list.forEach(item -> {
+	item.setMoney(Utils.getTwoDecimalPlaces(item.getMoney()));
+});
+```
 
 
 

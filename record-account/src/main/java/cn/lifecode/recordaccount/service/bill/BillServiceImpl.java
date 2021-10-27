@@ -3,6 +3,7 @@ package cn.lifecode.recordaccount.service.bill;
 import cn.lifecode.frameworkcore.bean.Request;
 import cn.lifecode.frameworkcore.bean.Response;
 import cn.lifecode.frameworkcore.util.DateUtil;
+import cn.lifecode.frameworkcore.util.Utils;
 import cn.lifecode.recordaccount.common.constant.Constant;
 import cn.lifecode.recordaccount.dto.bill.*;
 import cn.lifecode.recordaccount.entity.DayRecordAccount;
@@ -92,8 +93,8 @@ public class BillServiceImpl implements BillService {
             // 1.3 分装返回对象
             YearBillDetail yearBillDetail = new YearBillDetail();
             yearBillDetail.setYearBillDetailObjectList(yearBillDetailObjectList);
-            queryBillInfoResponse.setIncome(yearIncome);
-            queryBillInfoResponse.setExpense(yearExpense);
+            queryBillInfoResponse.setIncome(Utils.getTwoDecimalPlaces(yearIncome));
+            queryBillInfoResponse.setExpense(Utils.getTwoDecimalPlaces(yearExpense));
             queryBillInfoResponse.setYearBillDetail(yearBillDetail);
             yearBillDetail.setTotalSurplus(totalSurplus);
         }
@@ -113,12 +114,12 @@ public class BillServiceImpl implements BillService {
             for (int i = 0; i < recordAccountsList.size(); i++) {
                 DayRecordAccount obj = recordAccountsList.get(i);
                 Double sum = obj.getDayRecordAccountObjects().stream().filter(dayRecordAccountObjectFilter -> "0".equals(dayRecordAccountObjectFilter.getClassifyType())).collect(Collectors.summingDouble(DayRecordAccountObject::getBillMoney));
-                obj.setDayExpense(Math.round(sum));
+                obj.setDayExpense(Utils.getTwoDecimalPlaces(sum));
                 newRecordAccountsList.add(obj);
             }
             //封装返回内容
-            queryBillInfoResponse.setIncome(monthIncome);
-            queryBillInfoResponse.setExpense(monthExpense);
+            queryBillInfoResponse.setIncome(Utils.getTwoDecimalPlaces(monthIncome));
+            queryBillInfoResponse.setExpense(Utils.getTwoDecimalPlaces(monthExpense));
             queryBillInfoResponse.setTotal(dayRecordAccountObjectList.size());
             queryBillInfoResponse.setMonthBillDetailList(newRecordAccountsList);
         }

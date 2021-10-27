@@ -6,6 +6,7 @@ import cn.lifecode.frameworkcore.bean.Response;
 import cn.lifecode.frameworkcore.dto.ResponseObject;
 import cn.lifecode.frameworkcore.util.DateUtil;
 import cn.lifecode.frameworkcore.util.ExcelPoiUtil;
+import cn.lifecode.frameworkcore.util.Utils;
 import cn.lifecode.recordaccount.dto.home.AddRecordAcctRequest;
 import cn.lifecode.recordaccount.dto.home.AddRecordAcctResponse;
 import cn.lifecode.recordaccount.dto.home.HomeInitInfoResponse;
@@ -18,6 +19,9 @@ import cn.lifecode.recordaccount.mapper.recordaccount.RecordAccountMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -69,9 +73,9 @@ public class RecordAccountServiceImpl implements RecordAccountService {
         // 近三日账单总数
         int billNum = 0;
         //1.本月支出 （202101）
-        double moneyOutMonth = recordAccountMapper.queryTotalMoney("0", "month", dateArr[0] + dateArr[1], userId);
+        double moneyOutMonth = Utils.getTwoDecimalPlaces(recordAccountMapper.queryTotalMoney("0", "month", dateArr[0] + dateArr[1], userId));
         //2.本月收入
-        double moneyInMonth = recordAccountMapper.queryTotalMoney("1", "month", dateArr[0] + dateArr[1], userId);
+        double moneyInMonth = Utils.getTwoDecimalPlaces(recordAccountMapper.queryTotalMoney("1", "month", dateArr[0] + dateArr[1], userId));
         //3.查询最近3日的账单记录
         //过去时间
         Date passDate;
