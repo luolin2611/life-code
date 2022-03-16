@@ -176,4 +176,20 @@
                 #{addRecordAcctRequest.updateTime});
     </insert>
 
+    <select id="billExportQueryRecordAccount" resultMap="recordAccount">
+        select bill_money, classify_name, classify_type,remark,record_time from record_account where user_id=#{userId}
+        <if test="exportType == 'year'">
+            AND date_format(record_time, '%Y') = #{year}
+        </if>
+        <if test="exportType == 'month'">
+            AND date_format(record_time, '%Y%m') = #{month}
+        </if>
+        <if test="exportType == 'range'">
+            AND date_format(record_time, '%Y%m%d') &gt;= #{startDate}
+            AND date_format(record_time , '%Y%m%d') &lt;= #{endDate}
+        </if>
+        order by record_time desc
+    </select>
+
+
 </mapper>

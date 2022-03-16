@@ -9,6 +9,7 @@ import cn.lifecode.recordaccount.dto.bill.*;
 import cn.lifecode.recordaccount.entity.DayRecordAccount;
 import cn.lifecode.recordaccount.entity.DayRecordAccountObject;
 import cn.lifecode.recordaccount.entity.QueryMonthIncomeExpenseObject;
+import cn.lifecode.recordaccount.entity.RecordAccount;
 import cn.lifecode.recordaccount.entity.bill.YearBillDetail;
 import cn.lifecode.recordaccount.entity.bill.YearBillDetailObject;
 import cn.lifecode.recordaccount.mapper.recordaccount.RecordAccountMapper;
@@ -80,9 +81,9 @@ public class BillServiceImpl implements BillService {
                     yearBillDetailObject = new YearBillDetailObject();
                     yearBillDetailObject.setYear(year + "年");
                     yearBillDetailObject.setMonth(month + "月");
-                    yearBillDetailObject.setExpense(expense);
-                    yearBillDetailObject.setIncome(income);
-                    yearBillDetailObject.setSurplus(surplus);
+                    yearBillDetailObject.setExpense(Utils.getTwoDecimalPlaces(expense));
+                    yearBillDetailObject.setIncome(Utils.getTwoDecimalPlaces(income));
+                    yearBillDetailObject.setSurplus(Utils.getTwoDecimalPlaces(surplus));
                     yearBillDetailObjectList.add(yearBillDetailObject);
                 }
                 month--;
@@ -96,7 +97,7 @@ public class BillServiceImpl implements BillService {
             queryBillInfoResponse.setIncome(Utils.getTwoDecimalPlaces(yearIncome));
             queryBillInfoResponse.setExpense(Utils.getTwoDecimalPlaces(yearExpense));
             queryBillInfoResponse.setYearBillDetail(yearBillDetail);
-            yearBillDetail.setTotalSurplus(totalSurplus);
+            yearBillDetail.setTotalSurplus(Utils.getTwoDecimalPlaces(totalSurplus));
         }
         //2.月
         //前端传入参数： eg: 202101
@@ -236,5 +237,12 @@ public class BillServiceImpl implements BillService {
         // 3.将map中的内容添加到list中
         list.addAll(map.values());
         return list;
+    }
+
+    @Override
+    public BillExportResponse billExportQueryRecordAccount(BillExportRequest request) {
+        List<RecordAccount> recordAccounts = recordAccountMapper.billExportQueryRecordAccount(request.getExportType(),
+                request.getYear(), request.getYear() + request.getMonth(), request.getStartDate(), request.getEndDate(), request.getUserId());
+        return new BillExportResponse(recordAccounts);
     }
 }

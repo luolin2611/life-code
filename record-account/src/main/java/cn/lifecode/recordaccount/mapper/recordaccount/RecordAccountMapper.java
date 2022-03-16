@@ -1,5 +1,7 @@
 package cn.lifecode.recordaccount.mapper.recordaccount;
 
+import cn.lifecode.recordaccount.dto.bill.BillExportRequest;
+import cn.lifecode.recordaccount.dto.bill.BillExportResponse;
 import cn.lifecode.recordaccount.dto.home.AddRecordAcctRequest;
 import cn.lifecode.recordaccount.entity.DayRecordAccount;
 import cn.lifecode.recordaccount.entity.DayRecordAccountObject;
@@ -89,4 +91,24 @@ public interface RecordAccountMapper {
      * @return list
      */
     List<String> queryYearBrokeLineIncomeOrExpenseList(@Param("billType") String billType, @Param("year") String year);
+
+    /**
+     * 导出账单查询记账信息
+     *
+     * @param billType  账单类型 year/month/range
+     * @param year      年值 (yyyy)
+     * @param month     月值 (yyyyMM)
+     * @param startDate 开始时间 (yyyyMMdd)
+     * @param endDate   结束时间 (yyyyMMdd)
+     * @param userId    用户ID
+     * @return
+     */
+    List<RecordAccount> billExportQueryRecordAccount(
+            @Param("exportType") String exportType,
+            @Param("year") String year,
+            @Param("month") String month,
+            @Param("startDate") String startDate,
+            @Param("endDate") String endDate,
+            @Param("userId") String userId
+    );
 }

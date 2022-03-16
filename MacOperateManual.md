@@ -44,8 +44,16 @@ sudo find /Volumes/FILE_WORK/work/Code/SpringBoot/life-code -name ".DS_Store" -d
 ##### 设置不再产生 “.DS_Store”
 
 ```java
-defaults write com.apple.desktopservices DSDontWriteNetworkStores true 
+defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool TRUE
 ```
+
+##### 恢复生成 “.DS_Store”
+
+```
+defaults delete com.apple.desktopservices DSDontWriteNetworkStores
+```
+
+
 
 ### 显示/隐藏  “.” 开头的文件
 

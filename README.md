@@ -192,6 +192,79 @@ String userDetail = new StringBuilder()
                 .toString();
 ```
 
+#### 9.FastJson 将 JSONArray 转换为 java list
+
+```java
+// 错误示例 -- 此方式拿到的单个list 对象 并非为RecordAccount 对象
+JSONObject jsonObject = JSON.parseObject(response.getBody().toString());
+List<RecordAccount> recordAccounts = jsonObject.getJSONArray("recordAccounts").toJavaObject(List.class);
+
+// 正确示例
+JSONObject jsonObject = JSON.parseObject(response.getBody().toString());
+List<RecordAccount> recordAccounts = jsonObject.getJSONArray("recordAccounts").toJavaList(RecordAccount.class);
+
+```
+
+#### 10.下载后台生成的Excel文件流
+
+* 前端
+
+```javascript
+axios({
+  method: "post",
+  url: "record-account/bill/billExport",
+  data: {
+    userId: user.userId,
+    ...this.exportForm,
+  },
+  // 注意，此处一定要使用blob
+  responseType: "blob",
+})
+  .then((response) => {
+    if (!response) {
+      return;
+    }
+    // 创建一个临时的url指向blob对象
+    let url = window.URL.createObjectURL(response.data);
+    // 创建url之后可以模拟对此文件对象的一系列操作，例如：预览、下载
+    let a = document.createElement("a");
+    a.href = url;
+    a.download =
+      this.$moment(this.selectDateObj).format("YYYYMMDDHHmmss") +
+      ".xlsx";
+    a.click();
+    // 释放这个临时的对象url
+    window.URL.revokeObjectURL(url);
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+```
+
+* 后台
+
+```java
+Workbook wb = billService.billExportQueryRecordAccount(request);
+// 将wb 写入输出流中
+ServletOutputStream outputStream = response.getOutputStream();
+ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+wb.write(byteArrayOutputStream);
+// 响应类型,编码
+response.setContentType("application/vnd.ms-excel;charset=utf-8");
+// 设置生成的Excel的文件名
+response.setHeader("Content-Disposition", "attachment;filename=" +
+        new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".xlsx");
+// 刷新此输出流并强制将所有缓冲的输出字节被写出
+outputStream.write(byteArrayOutputStream.toByteArray());
+outputStream.flush();
+outputStream.close();
+wb.close();
+```
+
+
+
+
+
 #### GitHub 获取push token 
 
 ###### Settings
@@ -253,7 +326,9 @@ SELECT SUM(bill_money) , MONTH(update_time) FROM record_account WHERE classify_t
 
 ##### 1.2 sql 执行书序：温(when)哥(group by)华(having)白(order by)领(limit)
 
+#### 2.count(1)、count(*)、count(主键)、count(字段)
 
+> count(1) = count() > count(主键) > count(字段)
 
 ### 7.开发工具的使用
 
@@ -435,8 +510,8 @@ Person 类的子类，其类图如图所示。
 |        开闭原则 (Open-Closed Principle, OCP)        | 软件实体对扩展是开放的,但对修改是关闭的,即在不修改一 个软件实体的基础上去扩展其功能 | ★★★★★  |
 |  里氏替换原则 (Liskov Substitution Principle, LSP)  | 在软件系统中,一个可以接受基类对象的地方必然可以接受一个子类对象 | ★★★★☆  |
 |  依赖倒置原则 (Depedecy Inversion Principle, DIP)   |            要针对抽象层编程,而不要针对具体类编程             | ★★★★★  |
-| 接口隔高原则 (Interface Segregation Principle, ISP) |            使用多个专门的接口来取代一个统一的接口            | ★★☆☆☆  |
-|     合成复用原则 (Comotite euse Principle,CRP)      | 在系统中应该尽量多使用组合和聚合关联关系,尽量少使用甚 至不使用继承关系 | ★★★★☆  |
+| 接口隔离原则 (Interface Segregation Principle, ISP) |            使用多个专门的接口来取代一个统一的接口            | ★★☆☆☆  |
+|     合成复用原则 (Comotite euse Principle,CRP)      | 在系统中应该尽量多使用组合和聚合关联关系,尽量少使用甚至不使用继承关系 | ★★★★☆  |
 |          迪米特法则 (Law of Demeter, LoD)           | 一个软件实体对其他实体的引用越少越好,或者说如果两个类 不必彼此直接速信,那么这两个类就不应当发生直接的相互作 用,而是通过引入一个第三者发生间接交互 | ★★★☆☆  |
 
 #### 单一职责原则

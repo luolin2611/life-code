@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 /**
  * 账单页面
  *
@@ -45,7 +47,8 @@ public class BillController {
      * @return 柱状图所需要数据列表
      */
     @PostMapping("/queryMonthIncomeExpenseList")
-    public Response<QueryMonthIncomeExpenseListResponse> queryMonthIncomeExpenseList(@RequestBody Request<QueryMonthIncomeExpenseListRequest> request) {
+    public Response<QueryMonthIncomeExpenseListResponse> queryMonthIncomeExpenseList(
+            @RequestBody Request<QueryMonthIncomeExpenseListRequest> request) {
         return billService.queryMonthIncomeExpenseList(request);
     }
 
@@ -56,7 +59,20 @@ public class BillController {
      * @return 每月的收入和支出list
      */
     @PostMapping("/queryYearBrokeLineList")
-    public Response<QueryYearBrokeLineListResponse> queryYearBrokeLineList(@RequestBody Request<QueryYearBrokeLineListRequest> request) {
+    public Response<QueryYearBrokeLineListResponse> queryYearBrokeLineList(
+            @RequestBody Request<QueryYearBrokeLineListRequest> request) {
         return billService.queryYearBrokeLineList(request);
+    }
+
+    /**
+     * 查询账单导出
+     *
+     * @param request 请求参数
+     * @return 返回账单信息
+     */
+    @PostMapping("/billExport")
+    public Response<BillExportResponse> billExport(@Valid @RequestBody Request<BillExportRequest> request) {
+        BillExportResponse response = billService.billExportQueryRecordAccount(request.getBody());
+        return Response.success(response);
     }
 }
