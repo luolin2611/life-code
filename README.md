@@ -275,7 +275,7 @@ wb.close();
 
 ###### Developer settings
 
-![image-20211008225242995](/Volumes/FILE_WORK/work/Code/SpringBoot/life-code/folder/image/image-20211008225242995.png)
+![image-20211008225242995](image/image-20211008225242995.png)
 
 ###### Personal access tokens
 
@@ -316,7 +316,7 @@ list.forEach(item -> {
 
 ### 6.SQL 技术沉淀
 
-#### 1.使用分组group by (有‘每’字就可以考虑分组)
+#### 1.使用分组group by，having (有‘每’字就可以考虑分组)
 
 ##### 1.1 例如：查询某年每月的数据
 
@@ -325,6 +325,18 @@ SELECT SUM(bill_money) , MONTH(update_time) FROM record_account WHERE classify_t
 ```
 
 ##### 1.2 sql 执行书序：温(when)哥(group by)华(having)白(order by)领(limit)
+
+##### 1.3 Having 往往与 GROUP BY 配合使用，为聚合操作指定条件;
+
+​	说到指定条件，我们最先想到的往往是 WHERE 子句，但 WHERE 子句只能指定行的条件，而不能指定组的条件，因此就有了 HAVING 子句，它用来指定组的条件。
+
+例如：查询某年每月中账单金额大于1000的数据
+
+```sql
+SELECT * FROM record_account WHERE classify_type = '0' AND YEAR(update_time) = '2021' GROUP BY MONTH(update_time) HAVING bill_money > 1000
+```
+
+
 
 #### 2.count(1)、count(*)、count(主键)、count(字段)
 
