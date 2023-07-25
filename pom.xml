@@ -10,6 +10,8 @@
     <modules>
         <module>lifecode-framework</module>
         <module>gateway</module>
+        <module>record-account</module>
+        <module>user</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -71,6 +73,7 @@
     <build>
         <plugins>
             <plugin>
+                <version>2.3.4.RELEASE</version>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>

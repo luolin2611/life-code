@@ -34,6 +34,7 @@
         <!-- maven 插件 -->
         <plugins>
             <plugin>
+                <version>2.3.4.RELEASE</version>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
